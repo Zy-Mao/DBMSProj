@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        html {
+
+        }
+        html {
+            display: table;
+            margin: auto;
+        }
+        body {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        #navigation_bar {
+
+        }
+        #navigation_bar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #navigation_bar li {
+            float: left;
+        }
+        #navigation_bar a:link, #navigation_bar a:visited {
+            display: block;
+            width: 160px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #bebebe;
+            text-align: center;
+            padding: 4px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        #navigation_bar a:hover, #navigation_bar a:active {
+            background-color: #cc0000;
+        }
+    </style>
+    <title>{% block title %}
+    CS542 Project
+    {% endblock %}</title>
+    <!-- default: CS542 Project added by Ma -->
+</head>
+<body>
+    <!-- navigation bar is displayed in every page. added by Ma -->
+    <div id="navigation_bar">
+        <ul>
+            <li><a href="{% url 'navigator' home %}">HOME</a></li>
+            <li><a href="{% url 'navigator' account %}">ACCOUNT</a></li>
+            <li><a href="{% url 'navigator' travel %}">TRAVEL</a></li>
+            <li><a href="{% url 'navigator' help %}">HELP</a></li>
+            <li><a href="{% url 'navigator' about %}">ABOUT</a></li>
+        </ul>
+    </div>
+    <img src="" />
+    <!-- status_bar is to show the user status. added by Ma -->
+    <div id="status_bar">
+        Hello, {% block user_status %}
+        please <a href="">sign in</a> or <a href="">register</a>.
+        {% endblock %}
+    </div>
+</body>
+</html>
