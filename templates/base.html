@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static from staticfiles %}
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static "images/register.css" %}" media="screen" />
     <style>
         html {
 
@@ -15,7 +17,7 @@
             vertical-align: middle;
         }
         #navigation_bar {
-
+            padding: 10px;
         }
         #navigation_bar ul {
             list-style-type: none;
@@ -40,6 +42,31 @@
         #navigation_bar a:hover, #navigation_bar a:active {
             background-color: #cc0000;
         }
+
+
+        #header {
+            background-color:white;
+            color:white;
+            text-align:center;
+            padding:5px;
+        }
+        #status {
+            float:left;
+            padding:5px;
+            border: #45a049;
+        }
+        #section {
+            width:800px;
+            float:left;
+            padding:5px;
+        }
+        #footer {
+            background-color:black;
+            color:white;
+            clear:both;
+            text-align:center;
+            padding:5px;
+        }
     </style>
     <title>{% block title %}
     CS542 Project
@@ -48,19 +75,30 @@
 </head>
 <body>
     <!-- navigation bar is displayed in every page. added by Ma -->
-    <div id="navigation_bar">
-        <ul>
-            <li><a href="">HOME</a></li>
-            <li><a href="">ACCOUNT</a></li>
-            <li><a href="">TRAVEL</a></li>
-            <li><a href="">HELP</a></li>
-            <li><a href="">ABOUT</a></li>
-        </ul>
+    <div id="header">
+        <div id="navigation_bar">
+            <ul>
+                <li><a href="/navigator/{{ "home" }}/">HOME</a></li>
+                <li><a href="/navigator/{{ "account" }}/">ACCOUNT</a></li>
+                <li><a href="/navigator/{{ "travel" }}/">TRAVEL</a></li>
+                <li><a href="/navigator/{{ "help" }}/">HELP</a></li>
+                <li><a href="/navigator/{{ "about" }}/">ABOUT</a></li>
+            </ul>
+        </div>
+        <!-- Picture shows here. added by Ma -->
+        <img src="{% static "images/logo.jpg" %}" alt="Logo" width="800" height="200"/>
     </div>
+
     <!-- status_bar is to show the user status. added by Ma -->
-    <div id="status_bar">
+    <div id="status_bar, status">
         Hello, {% block user_status %}
-        please <a href="">sign in</a> or <a href="">register</a>.
+        please <a href="">sign in</a> or <a href="/navigator/{{ "register" }}/">register</a>.
+        {% endblock %}
+    </div>
+
+    <div id="section">
+        {% block content %}
+
         {% endblock %}
     </div>
 </body>
