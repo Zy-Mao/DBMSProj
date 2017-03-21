@@ -1,5 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.http import Http404
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 # Create your views here.
 
@@ -28,12 +29,22 @@ def navigator(request, direction):
     elif to == 'register':
         return render_to_response("register.html")
 
-
+@csrf_exempt
 def register(request):
-    t = 1
+    t = User(email=request.POST['email'],
+             firstname=request.POST['firstname'],
+             lastname=request.POST['lastname'],
+             password=request.POST['pwd'],
+             gender=request.POST['gender'],
+             state=request.POST['state'],
+             city=request.POST['city'],
+             address=request.POST['address'],
+             zipcode=request.POST['zipcode'],)
     try:
         t.save()
+        request.user.is_authenticated
     except Exception:
-        return render_to_response("current_time.html", {"success": "1"})
+        raise Http404()
+        # return render_to_response("info.html", {"isError": 1, "info_msg": "Error!"})
 
-    return render_to_response("current_time.html", {"help": "1"})
+    return render_to_response("info.html", {"isSuccess": 1, "info_msg": "Success!"})

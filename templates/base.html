@@ -3,7 +3,9 @@
 {% load static from staticfiles %}
 <head>
     <meta charset="UTF-8">
+    <!-- css files added by Ma -->
     <link rel="stylesheet" type="text/css" href="{% static "images/register.css" %}" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static "images/info.css" %}" media="screen" />
     <style>
         html {
 
@@ -94,6 +96,14 @@
         Hello, {% block user_status %}
         please <a href="">sign in</a> or <a href="/navigator/{{ "register" }}/">register</a>.
         {% endblock %}
+    </div>
+
+    <div id="status_bar, status">
+        Hello,
+        {% if request.user.is_authenticated %}
+        please <a href="">{{ 123 }}</a>.
+        {% else %}
+        {% endif %}
     </div>
 
     <div id="section">

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block user_status %}
+
+{% endblock %}
+{% block content %}
+    {% if isError == 1 %}
+        <div class="error">{{ info_msg }}</div>
+    {% endif %}
+    {% if isInfo == 1%}
+        <div class="info">{{ info_msg }}</div>
+    {% endif %}
+
+    {% if isSuccess == 1%}
+        <div class="success">{{ info_msg }}</div>
+    {% endif %}
+
+    {% if isWarning == 1%}
+        <div class="warning">{{ info_msg }}</div>
+    {% endif %}
+
+
+{% endblock %}
