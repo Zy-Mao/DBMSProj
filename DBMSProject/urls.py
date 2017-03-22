@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^navigator/(?P<direction>[\w\-]+)/$', navigator, name='navigator'), # parameter name should be the same in the views.py
     url(r'^$', default),
     url(r'^register/$', register, name='register'),
+    url(r'^signin/$', signin, name='signin'),
 ]

@@ -3,113 +3,54 @@
 {% load static from staticfiles %}
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- css files added by Ma -->
-    <link rel="stylesheet" type="text/css" href="{% static "images/register.css" %}" media="screen" />
-    <link rel="stylesheet" type="text/css" href="{% static "images/info.css" %}" media="screen" />
-    <style>
-        html {
-
-        }
-        html {
-            display: table;
-            margin: auto;
-        }
-        body {
-            display: table-cell;
-            vertical-align: middle;
-        }
-        #navigation_bar {
-            padding: 10px;
-        }
-        #navigation_bar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        #navigation_bar li {
-            float: left;
-        }
-        #navigation_bar a:link, #navigation_bar a:visited {
-            display: block;
-            width: 160px;
-            font-weight: bold;
-            color: #FFFFFF;
-            background-color: #bebebe;
-            text-align: center;
-            padding: 4px;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-        #navigation_bar a:hover, #navigation_bar a:active {
-            background-color: #cc0000;
-        }
-
-
-        #header {
-            background-color:white;
-            color:white;
-            text-align:center;
-            padding:5px;
-        }
-        #status {
-            float:left;
-            padding:5px;
-            border: #45a049;
-        }
-        #section {
-            width:800px;
-            float:left;
-            padding:5px;
-        }
-        #footer {
-            background-color:black;
-            color:white;
-            clear:both;
-            text-align:center;
-            padding:5px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static "css/css.css" %}" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/font.css" %}" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/w3.css" %}" media="screen" />
     <title>{% block title %}
     CS542 Project
     {% endblock %}</title>
     <!-- default: CS542 Project added by Ma -->
+    <style>
+        body,h1,h2,h3,h4,h5,h6 {
+            font-family: "Raleway",Arial,Helvetica,sans-serif
+        }.myLink {display: none}
+    </style>
 </head>
-<body>
-    <!-- navigation bar is displayed in every page. added by Ma -->
-    <div id="header">
-        <div id="navigation_bar">
-            <ul>
-                <li><a href="/navigator/{{ "home" }}/">HOME</a></li>
-                <li><a href="/navigator/{{ "account" }}/">ACCOUNT</a></li>
-                <li><a href="/navigator/{{ "travel" }}/">TRAVEL</a></li>
-                <li><a href="/navigator/{{ "help" }}/">HELP</a></li>
-                <li><a href="/navigator/{{ "about" }}/">ABOUT</a></li>
-            </ul>
+<body class="w3-light-grey">
+    <!-- Navigation Bar -->
+    <div class="w3-bar w3-white w3-border-bottom w3-xlarge">
+        <a href="#" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b><i class="fa fa-map-marker w3-margin-right"></i>Logo</b></a>
+        <a href="/navigator/{{ "home" }}/" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b>HOME</b></a>
+        <a href="/navigator/{{ "account" }}/" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b>ACCOUNT</b></a>
+        <a href="/navigator/{{ "travel" }}/" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b>TRAVEL</b></a>
+        <a href="/navigator/{{ "about" }}/" class="w3-bar-item w3-button w3-text-red w3-hover-red"><b>ABOUT</b></a>
+    </div>
+
+    <div class="w3-container w3-center">
+        <h6>Hello, {% if user.is_authenticated %}
+                {{ user.last_name }}. Click <a href="/navigator/{{ "signout" }}/">sign out</a>.
+            {% else %}
+                please <a href="/navigator/{{ "signin" }}/">sign in</a> or <a href="/navigator/{{ "register" }}/">register</a>.
+            {% endif %}
+        </h6>
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+    <footer class="w3-container w3-center w3-opacity w3-margin-bottom">
+        <h5>Find Us On</h5>
+        <div class="w3-xlarge w3-padding-16">
+            <i class="fa fa-facebook-official w3-hover-text-indigo"></i>
+            <i class="fa fa-instagram w3-hover-text-purple"></i>
+            <i class="fa fa-snapchat w3-hover-text-yellow"></i>
+            <i class="fa fa-pinterest-p w3-hover-text-red"></i>
+            <i class="fa fa-twitter w3-hover-text-light-blue"></i>
+            <i class="fa fa-linkedin w3-hover-text-indigo"></i>
         </div>
-        <!-- Picture shows here. added by Ma -->
-        <img src="{% static "images/logo.jpg" %}" alt="Logo" width="800" height="200"/>
-    </div>
-
-    <!-- status_bar is to show the user status. added by Ma -->
-    <div id="status_bar, status">
-        Hello, {% block user_status %}
-        please <a href="">sign in</a> or <a href="/navigator/{{ "register" }}/">register</a>.
-        {% endblock %}
-    </div>
-
-    <div id="status_bar, status">
-        Hello,
-        {% if request.user.is_authenticated %}
-        please <a href="">{{ 123 }}</a>.
-        {% else %}
-        {% endif %}
-    </div>
-
-    <div id="section">
-        {% block content %}
-
-        {% endblock %}
-    </div>
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+    </footer>
 </body>
 </html>

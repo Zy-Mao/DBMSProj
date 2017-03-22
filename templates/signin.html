@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+User Login
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="w3-content" style="max-width:1100px;">
+    <h3>Please Sign in:</h3>
+    <div style="width:65%">
+        <form action="{% url 'signin' %}" method="post">{% csrf_token %}
+        <label for="username">User Name</label>
+        <input type="username" id="username" name="username">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" maxlength="50">
+
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+</div>
+{% endblock %}
