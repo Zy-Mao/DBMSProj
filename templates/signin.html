@@ -1,21 +1,32 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
 {% block title %}
 User Login
 {% endblock %}
 
 {% block content %}
-<div class="w3-content" style="max-width:1100px;">
-    <h3>Please Sign in:</h3>
-    <div style="width:65%">
-        <form action="{% url 'signin' %}" method="post">{% csrf_token %}
-        <label for="username">User Name</label>
-        <input type="username" id="username" name="username">
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" maxlength="50">
-
-        <input type="submit" value="Submit">
-    </form>
+<header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+    <img class="w3-image" src="{% static "images/logo.jpg" %}" alt="London" width="1500" height="500">
+    <div class="w3-display-middle" style="width:65%">
+        <div class="w3-container w3-gray w3-padding-16">
+            <h3>Please Sign in:</h3>
+            <form action="{% url 'signin' %}" method="post">{% csrf_token %}
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-half">
+                        <label for="username">User Name</label>
+                        <input class="w3-input w3-border" type="username" id="username" name="username">
+                    </div>
+                    <div class="w3-half">
+                        <label for="password">Password</label>
+                        <input class="w3-input w3-border" type="password" id="password" name="password" maxlength="50">
+                    </div>
+                </div>
+                <input class="w3-button w3-dark-grey" type="submit" value="Submit">
+            </form>
+        </div>
     </div>
-</div>
+</header>
+
+
+
 {% endblock %}
