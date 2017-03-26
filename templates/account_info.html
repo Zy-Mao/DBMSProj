@@ -3,7 +3,7 @@
 User Info
 {% endblock %}
 {% block content %}
-    <div class="w3-content" style="max-width:1100px;">
+<div class="w3-content" style="max-width:1100px;">
     {% if not user.is_authenticated %}
         <h3>You need sign in to get access your account information</h3>
     {% else %}
@@ -30,17 +30,42 @@ User Info
                         <label class="w3-input w3-border">{{ ud.state }}</label>
                         <br>
                         <label for="city">City</label>
-                        <input class="w3-input w3-border" type="text" id="city" name="city" maxlength="20" readonly="true">
+                        <input class="w3-input w3-border" type="text" id="city" name="city" maxlength="20" readonly="true" value="{{ city }}">
                         <br>
                         <label for="address">Address</label>
-                        <input class="w3-input w3-border" type="text" id="address" name="address" maxlength="50" readonly="true">
+                        <input class="w3-input w3-border" type="text" id="address" name="address" maxlength="50" readonly="true" value="{{ address }}">
                         <br>
                         <label for="zipcode">Zip Code</label>
-                        <input class="w3-input w3-border" type="text" id="zipcode" name="zipcode" maxlength="5" readonly="true">
+                        <input class="w3-input w3-border" type="text" id="zipcode" name="zipcode" maxlength="5" readonly="true" value="{{ zipcode }}">
                         <br>
+                        <input class="w3-button w3-dark-grey" type="submit" value="Modify">
                     </form>
                 {% elif show_id == 2 %}
-
+                    <form action="{% url 'register' %}" method="post">{% csrf_token %}
+                        <label for="fname">First Name</label>
+                        <input class="w3-input w3-border" type="text" id="fname" name="firstname" value="{{ user.first_name }}" maxlength="50" readonly="true">
+                        <br>
+                        <label for="lname">Last Name</label>
+                        <input class="w3-input w3-border" type="text" id="lname" name="lastname" value="{{ user.last_name }}" maxlength="50" readonly="true">
+                        <br>
+                        <label for="email">Email</label>
+                        <input class="w3-input w3-border" type="email" id="email" name="email" value="{{ user.email }}" readonly="true">
+                        <br>
+                        <label for="state">State</label>
+                        <label class="w3-input w3-border">{{ ud.state }}</label>
+                        <br>
+                        <label for="city">City</label>
+                        <input class="w3-input w3-border" type="text" id="city" name="city" maxlength="20" readonly="true" value="{{ city }}">
+                        <br>
+                        <label for="address">Address</label>
+                        <input class="w3-input w3-border" type="text" id="address" name="address" maxlength="50" readonly="true" value="{{ address }}">
+                        <br>
+                        <label for="zipcode">Zip Code</label>
+                        <input class="w3-input w3-border" type="text" id="zipcode" name="zipcode" maxlength="5" readonly="true" value="{{ zipcode }}">
+                        <br>
+                        <input class="w3-button w3-dark-grey" type="submit" value="Modify">
+                        <button value="Cancel" class="w3-button w3-dark-grey" onclick="">Cancel</button>
+                    </form>
                 {% elif show_id == 3 %}
 
                 {% elif show_id == 4 %}
