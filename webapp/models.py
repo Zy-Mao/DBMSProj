@@ -17,5 +17,3 @@ class User_Detail(models.Model):
     # registerdate = models.DateField(auto_now_add=True)
 
 
-
-
