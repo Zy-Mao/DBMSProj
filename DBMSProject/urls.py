@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^$', default),
     url(r'^register/$', register, name='register'),
     url(r'^signin/$', signin, name='signin'),
+    url(r'^user_modify', user_modify, name="user_modify")
 ]

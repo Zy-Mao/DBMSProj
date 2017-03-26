@@ -5,6 +5,8 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -81,11 +83,18 @@ def account_navigator(request, direction):
     except ValueError:
         raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
     if to == 'info':
-        return render(request, "account_info.html", {"show_id": 1, "user": ud})
-    elif to == 'account':
-        return render(request, "account_info.html")
+        return render(request, "account_info.html", {"show_id": 1, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
+    elif to == 'pwdmodify':
+        return render(request, "account_info.html", {"show_id": 2, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
+    elif to == 'pwdmodify':
+        return render(request, "account_info.html", {"show_id": 2, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
     elif to == 'travel':
         return render(request)
+    ud.state
+
+@login_required(login_url='/navigator/signin/')
+def user_modify(request):
+    u = request.user
 
 
 
