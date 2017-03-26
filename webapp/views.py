@@ -79,22 +79,40 @@ def account_navigator(request, direction):
     try:
         to = direction
         u = request.user
-        ud = User_Detail.objects.get(user=u)
+        ud = User_Detail.objects.get(user_id=u.id)
     except ValueError:
         raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
     if to == 'info':
         return render(request, "account_info.html", {"show_id": 1, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
+    elif to == 'infomodify':
+        return render(request, "account_info.html", {"show_id": 2, "ud": ud})
     elif to == 'pwdmodify':
-        return render(request, "account_info.html", {"show_id": 2, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
-    elif to == 'pwdmodify':
-        return render(request, "account_info.html", {"show_id": 2, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
+        return render(request, "account_info.html", {"show_id": 3})
     elif to == 'travel':
         return render(request)
-    ud.state
+
 
 @login_required(login_url='/navigator/signin/')
 def user_modify(request):
     u = request.user
 
+
+@csrf_exempt
+def pwd_modify(request):
+    try:
+        old_password = request.POST['cpwd']
+        new_password = request.POST['npwd']
+
+        user = authenticate(username=request.user.email, password=old_password)
+        u = User.objects.get(username=request.user.email)
+    except ValueError:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    if user is not None:
+        u.set_password(new_password)
+        u.save()
+        logout(request)
+        return render(request, "info.html", {"isSuccess": 1, "info_msg": "Password modify Successfully. Please signin again."})
+    else:
+        return render(request, "account_info.html", {"show_id": 3, "error_info": "Your password is NOT correct."})
 
 
