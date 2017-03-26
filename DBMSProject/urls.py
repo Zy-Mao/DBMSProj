@@ -20,6 +20,7 @@ from webapp.views import *
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^navigator/(?P<direction>[\w\-]+)/$', navigator, name='navigator'), # parameter name should be the same in the views.py
+    url(r'^account_navigator/(?P<direction>[\w\-]+)/$', account_navigator, name='account_navigator'),
     url(r'^$', default),
     url(r'^register/$', register, name='register'),
     url(r'^signin/$', signin, name='signin'),

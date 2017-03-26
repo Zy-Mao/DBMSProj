@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate, login, logout
 def default(request):
     return render_to_response("main.html")
 
-
 def navigator(request, direction):
     try:
         to = direction
@@ -20,7 +19,7 @@ def navigator(request, direction):
     if to == 'home':
         return render(request, "main.html")
     elif to == 'account':
-        return render(request, "")
+        return render(request, "account_info.html")
     elif to == 'travel':
         return render(request)
     elif to == 'about':
@@ -44,7 +43,6 @@ def register(request):
                                      password=request.POST['pwd'],
                                      username=request.POST['email'],)
         u = User.objects.get(username=request.POST['email'])
-
         ud = User_Detail(user=u,
                          state=request.POST['state'],
                          address=request.POST['address'],
@@ -56,9 +54,8 @@ def register(request):
             login(request=request, user=u)
 
     except Exception:
-        raise Http404()
-        # return render_to_response("info.html", {"isError": 1, "info_msg": "Error!"})
-
+        return render(request, "info.html",
+                      {"isError": 1, "info_msg": "Account is NOT exist or Password is NOT correct."})
     return render(request, "info.html", {"isSuccess": 1, "info_msg": "Success!"})
 
 
@@ -71,11 +68,24 @@ def signin(request):
 
     if user is not None:
         login(request, user)
-        return render(request, "info.html", {"isSuccess": 1, "info_msg": "Success!"})
+        return render(request, "info.html", {"isSuccess": 1, "info_msg": "Sign in Successfully"})
     else:
-        return render(request, "info.html", {"isError": 1, "info_msg": "Fail!!"})
+        return render(request, "signin.html", {"isError": 1, "info_msg": "Account is NOT exist or Password is NOT correct."})
 
 
+def account_navigator(request, direction):
+    try:
+        to = direction
+        u = request.user
+        ud = User_Detail.objects.get(user=u)
+    except ValueError:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    if to == 'info':
+        return render(request, "account_info.html", {"show_id": 1, "user": ud})
+    elif to == 'account':
+        return render(request, "account_info.html")
+    elif to == 'travel':
+        return render(request)
 
 
 
