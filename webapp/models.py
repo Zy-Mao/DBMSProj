@@ -59,5 +59,3 @@ class Train_Schedule(models.Model):
     arrival_city = models.CharField(max_length=20)
     price = models.FloatField()
     arrival_time = models.DateTimeField()
-
-# Just a test - Try to ignore PyCharm configuration file.
