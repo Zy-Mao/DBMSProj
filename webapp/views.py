@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 
 
 def default(request):
-    return render_to_response("main.html")
+    return render(request, "main.html")
 
 def navigator(request, direction):
     try:
