@@ -39,11 +39,11 @@ class Hotel_Room(models.Model):
         unique_together = (('room_no', 'hotel'),)
 
 
-# class Hotel_Order(models.Model):
-#     room_id = models.CharField(max_length=5)
-#     hotel_id = models.ForeignKey(Hotel_Detail, on_delete=models.CASCADE)
-#     date = models.DateTimeField()
-#     user_id = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
+class Hotel_Order(models.Model):
+    # PK: auto generated
+    hotel_room = models.ForeignKey(Hotel_Room, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    user = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
 
 
 class Train(models.Model):
@@ -61,8 +61,21 @@ class Train_Schedule(models.Model):
     arrival_time = models.DateTimeField()
 
 
+class Train_Order(models.Model):
+    user = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
+    transaction_date = models.DateTimeField()
+
+
+class Train_Sub_Order(models.Model):
+    ticket_no = models.AutoField(primary_key=True)
+    order_id = models.AutoField()
+    departure_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE)
+    arrival_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE)
+    train = models.ForeignKey(Train, on_delete=models.CASCADE)
+
+
 class City(models.Model):
-    cid = models.IntegerField(max_length=3, primary_key=True)
+    cid = models.IntegerField(primary_key=True)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     abb_state = models.CharField(max_length=10)
