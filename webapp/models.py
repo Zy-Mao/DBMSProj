@@ -59,3 +59,10 @@ class Train_Schedule(models.Model):
     arrival_city = models.CharField(max_length=20)
     price = models.FloatField()
     arrival_time = models.DateTimeField()
+
+
+class City(models.Model):
+    cid = models.IntegerField(max_length=3, primary_key=True)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    abb_state = models.CharField(max_length=10)
