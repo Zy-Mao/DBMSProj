@@ -67,10 +67,9 @@ class Train_Order(models.Model):
 
 
 class Train_Sub_Order(models.Model):
-    ticket_no = models.AutoField(primary_key=True)
-    order_id = models.AutoField()
-    departure_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE)
-    arrival_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE)
+    order_no = models.AutoField(primary_key=True)
+    departure_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE, related_name="departure_train_schedule")
+    arrival_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE, related_name="arrival_train_schedule")
     train = models.ForeignKey(Train, on_delete=models.CASCADE)
 
 
