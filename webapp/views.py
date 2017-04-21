@@ -6,7 +6,9 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+import json
 # Create your views here.
 
 
@@ -24,6 +26,8 @@ def navigator(request, direction):
         return render(request, "account_info.html")
     elif to == 'travel':
         return render(request)
+    elif to == 'hotel':
+        return render(request, "search_hotel.html")
     elif to == 'about':
         return render(request)
     elif to == 'signin':
@@ -115,4 +119,21 @@ def pwd_modify(request):
     else:
         return render(request, "account_info.html", {"show_id": 3, "error_info": "Your password is NOT correct."})
 
+@csrf_exempt
+def get_citys(request):
+    # if request.is_ajax():
+    q = request.GET.get('term', '')
+    citys = City.objects.filter(city__contains=q)[:20]
+    results = []
+    for city in citys:
+        city_json = {}
+        city_json['id'] = city.cid
+        city_json['label'] = city.city + ', ' + city.state
+        city_json['value'] = city.city
+        results.append(city_json)
+    data = json.dumps(results)
+    # else:
+    #    data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
