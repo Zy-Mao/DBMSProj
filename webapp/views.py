@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 import json
 # Create your views here.
 
@@ -136,4 +137,32 @@ def get_citys(request):
     #    data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+
+@csrf_exempt
+def search_hotel(request):
+    try:
+        hcity = request.POST['scity']
+
+        htype = request.POST['htype']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+
+    if hcity == '':
+        hotels = Hotel_Detail.objects.all()
+    else:
+        hotels = Hotel_Detail.objects.filter(city=hcity)
+
+    if htype != '0':
+        hotels = hotels.filter(type=htype)
+    # hotels = Hotel_Detail.objects.filter(type__exact=htype)
+    return render(request, "list_hotel.html", {"hotels": hotels, "a":htype, "b":hcity})
+
+
+def room_hotel(request, hid):
+    hotel = Hotel_Detail.objects.get(hotel_id=hid)
+
+    hotel_room = Hotel_Room.objects.get(hotel=hotel)
+
+    return render(request, "room_hotel.html", {"hotel_room": hotel_room, "hotel": hotel})
 

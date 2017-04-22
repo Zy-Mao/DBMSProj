@@ -14,26 +14,24 @@
     </script>
 {% endblock %}
 {% block title %}
-Hotels
+Hotel Detail
 {% endblock %}
 
 {% block content %}
-<h1>Hotels</h1>
+<h1>Hotels  {{ a }} {{ b }}</h1>
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
     <form action="{% url "signin" %}" method="post">
-    {% if hotels %}
+    {% if hotel_room %}
         <table border="1">
             <tr>
                 <td>Choice</td>
-                <td>Name</td>
-                <td>State</td>
-                <td>City</td>
                 <td>Type</td>
+                <td>Price</td>
                 <td>Description</td>
             </tr>
-        {% for hotel in hotels %}
+        {% for room in hotel_room %}
             <tr>
-                <td><a href="/room_hotel/{{ hotel.hotel_id }}/">{{ hotel.name }}</a></td>
+                <td><a href="">{{ hotel.name }}</a></td>
                 <td><label>{{ hotel.state }}</label></td>
                 <td><label>{{ hotel.city }}</label></td>
                 <td><label>{{ hotel.type }}</label></td>

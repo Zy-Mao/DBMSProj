@@ -62,7 +62,7 @@ class Train_Schedule(models.Model):
 
 
 class City(models.Model):
-    cid = models.IntegerField(max_length=3, primary_key=True)
+    cid = models.IntegerField(primary_key=True)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     abb_state = models.CharField(max_length=10)
