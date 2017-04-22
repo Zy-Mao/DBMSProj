@@ -16,17 +16,28 @@ Travel
         <!-- Tabs -->
         <div id="Train" class="w3-container w3-white w3-padding-16 myLink">
           <h3>Travel the world with us</h3>
-          <div class="w3-row-padding" style="margin:0 -16px;">
+          <form action="{% url 'search_trains' %}" method="post">{% csrf_token %}
+						<div class="w3-row-padding" style="margin:8px -16px;">
+							<div class="w3-half">
+								<label>Departure City</label>
+								<input class="w3-input w3-border" name="departure-city" type="text" placeholder="Departing from">
+							</div>
+							<div class="w3-half">
+								<label>Arrival City</label>
+								<input class="w3-input w3-border" name="arrival-city" type="text" placeholder="Arriving at">
+							</div>
+						</div>
+						<div class="w3-row-padding" style="margin:8px -16px;">
             <div class="w3-half">
-              <label>From</label>
-              <input class="w3-input w3-border" type="text" placeholder="Departing from">
+              <input class="w3-input w3-border" type="date" name="departure-date" value="2017-05-01">
             </div>
             <div class="w3-half">
-              <label>To</label>
-              <input class="w3-input w3-border" type="text" placeholder="Arriving at">
+{#                <button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button>#}
+                <input class="w3-button w3-dark-grey" type="submit" value="Search">
             </div>
-          </div>
-          <p><button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button></p>
+            </div>
+{#          <p><button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button></p>#}
+					</form>
         </div>
 
         <div id="Hotel" class="w3-container w3-white w3-padding-16 myLink">

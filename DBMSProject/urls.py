@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^$', default),
     url(r'^get_citys/$', get_citys, name='get_citys'),
     url(r'^register/$', register, name='register'),
+    url(r'^search_trains/$', search_trains, name='search_trains'),
     url(r'^signin/$', signin, name='signin'),
     url(r'^user_modify', user_modify, name="user_modify"),
     url(r'^search_hotel/$', search_hotel, name="search_hotel"),

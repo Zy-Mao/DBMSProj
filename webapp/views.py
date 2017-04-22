@@ -120,6 +120,7 @@ def pwd_modify(request):
     else:
         return render(request, "account_info.html", {"show_id": 3, "error_info": "Your password is NOT correct."})
 
+
 @csrf_exempt
 def get_citys(request):
     # if request.is_ajax():
@@ -166,3 +167,18 @@ def room_hotel(request, hid):
 
     return render(request, "room_hotel.html", {"hotel_room": hotel_room, "hotel": hotel})
 
+
+@csrf_exempt
+def search_trains(request):
+    result_list = []
+    for train in Train.objects.all():
+        try:
+            departure_train_schedule = train.train_schedule_set.get(arrival_city=request.POST['departure-city'])
+            arrival_train_schedule = train.train_schedule_set.get(arrival_city=request.POST['arrival-city'])
+        except ValueError:
+            raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+        if departure_train_schedule is not None and arrival_train_schedule is not None \
+                and arrival_train_schedule.arrival_time > departure_train_schedule.arrival_time:
+            result_list.append((departure_train_schedule, arrival_train_schedule))
+
+    return render(request, "hotel_list.html", {"result_list": result_list})
