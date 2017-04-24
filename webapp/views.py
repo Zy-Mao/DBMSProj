@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from datetime import datetime
+from datetime import timedelta
 import json
 # Create your views here.
 
@@ -157,15 +159,63 @@ def search_hotel(request):
     if htype != '0':
         hotels = hotels.filter(type=htype)
     # hotels = Hotel_Detail.objects.filter(type__exact=htype)
-    return render(request, "list_hotel.html", {"hotels": hotels, "a":htype, "b":hcity})
+    return render(request, "hotel_list.html", {"hotels": hotels, "a":htype, "b":hcity})
 
 
 def room_hotel(request, hid):
     hotel = Hotel_Detail.objects.get(hotel_id=hid)
 
-    hotel_room = Hotel_Room.objects.get(hotel=hotel)
+    hotel_room = Hotel_Room.objects.filter(hotel=hotel)
 
     return render(request, "room_hotel.html", {"hotel_room": hotel_room, "hotel": hotel})
+
+@csrf_exempt
+def order_hotel(request):
+    try:
+        hid = request.POST['hid']
+        rid = request.POST['choice']
+        user = request.user
+        checkin = request.POST['indate']
+        checkout = request.POST['outdate']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    checkin = datetime.strptime(checkin, '%Y-%m-%d')
+    checkout = datetime.strptime(checkout, '%Y-%m-%d')
+
+    days = checkout - checkin
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        ho = Hotel_Order(hotel_room_id=rid, indate=ddate, user_id=user.id)
+        ho.save()
+    return render(request, "info.html", {"isSuccess": 1, "info_msg": "Order Successfully!"})
+
+# date should be yyyy-mm-dd
+# rid: room_id
+def checkhotelorder(rid, date):
+    return 0
+
+
+def comfirm_hotel_order(request):
+    try:
+        hid = request.POST['hid']
+        rid = request.POST['choice']
+        user = request.user
+        checkin = request.POST['indate']
+        checkout = request.POST['outdate']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    checkin = datetime.strptime(checkin, '%Y-%m-%d')
+    checkout = datetime.strptime(checkout, '%Y-%m-%d')
+
+    days = checkout - checkin
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        ho = Hotel_Order(hotel_room_id=rid, date=ddate, user_id=user.id)
+        ho.save()
 
 
 @csrf_exempt
@@ -182,3 +232,4 @@ def search_trains(request):
             result_list.append((departure_train_schedule, arrival_train_schedule))
 
     return render(request, "hotel_list.html", {"result_list": result_list})
+

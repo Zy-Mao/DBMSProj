@@ -5,11 +5,10 @@
 {% endblock %}
 {% block head %}
     <script>
-        $(function() {
-            $("#scity").autocomplete({
-                source: "/get_citys/",
-                minLength: 2,
-            });
+        $(document).ready(function(){
+            var date = new Date();
+            var day = date.getDate()
+            $('#indate').val(new Date().toDateInputValue());
         });
     </script>
 {% endblock %}
@@ -18,28 +17,52 @@ Hotel Detail
 {% endblock %}
 
 {% block content %}
-<h1>Hotels  {{ a }} {{ b }}</h1>
+<h1>Hotels</h1>
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
-    <form action="{% url "signin" %}" method="post">
+    <form action="{% url "order_hotel" %}" method="post">
     {% if hotel_room %}
+        <table>
+            <tr>
+                <td>Check in</td>
+                <td>Check out</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="date" name="indate" id="indate" value="2017-04-24" />
+                </td>
+                <td>
+                    <input type="date" name="outdate" id="outdate" value="2017-04-25" />
+                </td>
+            </tr>
+        </table>
         <table border="1">
             <tr>
-                <td>Choice</td>
-                <td>Type</td>
-                <td>Price</td>
-                <td>Description</td>
+                <th>Choice</th>
+                <th>Overview</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Description</th>
             </tr>
         {% for room in hotel_room %}
             <tr>
-                <td><a href="">{{ hotel.name }}</a></td>
-                <td><label>{{ hotel.state }}</label></td>
-                <td><label>{{ hotel.city }}</label></td>
-                <td><label>{{ hotel.type }}</label></td>
-                <td><label>{{ hotel.description }}</label></td>
+                <td><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ room.room_no }}">ads:{{ room.room_no }}</td>
+                <!-- <td><input type="submit" value="Order" name="order" id="order" /></td> -->
+                <td><img src="{% static "images/rooms/hid_19_room_1.jpg" %}" height="100" width="100"></td>
+                <td><label>{{ room.type }}</label></td>
+                <td><label>{{ room.price }}</label></td>
+                <td><label>{{ room.description }}</label></td>
                 <input type="hidden" id="hid" name="hid" value="{{ hotel.hotel_id }}" />
+
             </tr>
         {% endfor %}
         </table>
+
+        {% if user.is_authenticated %}
+            <input type="submit" name="submit" id="submit" value="Submit" />
+        {% else %}
+            please <a href="/navigator/{{ "signin" }}/">sign in</a> or <a href="/navigator/{{ "register" }}/">register</a> to order.
+        {% endif %}
+
 
     {% endif %}
 
