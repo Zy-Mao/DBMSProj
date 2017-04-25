@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from datetime import datetime
 from datetime import timedelta
+from django.db import connection
 import json
 # Create your views here.
 
@@ -169,8 +170,50 @@ def room_hotel(request, hid):
 
     return render(request, "room_hotel.html", {"hotel_room": hotel_room, "hotel": hotel})
 
+
 @csrf_exempt
 def order_hotel(request):
+    try:
+        hid = request.POST['hid']
+        rid = request.POST['choice']
+        user = request.user
+        checkin = request.POST['indate']
+        checkout = request.POST['outdate']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    checkin = datetime.strptime(checkin, '%Y-%m-%d')
+    checkout = datetime.strptime(checkout, '%Y-%m-%d')
+
+
+    days = checkout - checkin
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        if not checkhotelorder(rid, ddate):
+            return render(request, "room_hotel.html", {"order_status": 0})
+
+    ohotel = Hotel_Detail.objects.get(hotel_id=hid)
+    oroom = Hotel_Room.objects.get(room_no=rid)
+
+    return render(request, "confirm_hotel_order.html",
+                  {"order_status": 1, "ohotel": ohotel, "oroom": oroom,
+                   "checkin": checkin.strftime('%Y-%m-%d'), "checkout": checkout.strftime('%Y-%m-%d'),
+                   "period": days.days})
+
+# date should be yyyy-mm-dd
+# rid: room_id
+def checkhotelorder(rid, checkin):
+    with connection.cursor() as cursor:
+        cursor.execute("select 1 from webapp_hotel_order t where t.indate = to_date(%s, \'yyyy-mm-dd\') and t.hotel_room_id = %s", [checkin, rid])
+        row = cursor.fetchone()
+    if row == None:
+        return True
+    else:
+        return False
+
+@csrf_exempt
+def comfirm_hotel_order(request):
     try:
         hid = request.POST['hid']
         rid = request.POST['choice']
@@ -190,32 +233,6 @@ def order_hotel(request):
         ho = Hotel_Order(hotel_room_id=rid, indate=ddate, user_id=user.id)
         ho.save()
     return render(request, "info.html", {"isSuccess": 1, "info_msg": "Order Successfully!"})
-
-# date should be yyyy-mm-dd
-# rid: room_id
-def checkhotelorder(rid, date):
-    return 0
-
-
-def comfirm_hotel_order(request):
-    try:
-        hid = request.POST['hid']
-        rid = request.POST['choice']
-        user = request.user
-        checkin = request.POST['indate']
-        checkout = request.POST['outdate']
-    except Exception:
-        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
-    checkin = datetime.strptime(checkin, '%Y-%m-%d')
-    checkout = datetime.strptime(checkout, '%Y-%m-%d')
-
-    days = checkout - checkin
-
-    for i in range(0, days.days):
-        ddate = checkin + timedelta(days=i)
-        ddate = ddate.strftime('%Y-%m-%d')
-        ho = Hotel_Order(hotel_room_id=rid, date=ddate, user_id=user.id)
-        ho.save()
 
 
 @csrf_exempt

@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^account_navigator/(?P<direction>[\w\-]+)/$', account_navigator, name='account_navigator'),
     url(r'^$', default),
     url(r'^get_citys/$', get_citys, name='get_citys'),
+    url(r'^confirm_hotel_order/$', comfirm_hotel_order, name='comfirm_hotel_order'),
     url(r'^register/$', register, name='register'),
     url(r'^orderhotel/$', order_hotel, name='order_hotel'),
     url(r'^search_trains/$', search_trains, name='search_trains'),

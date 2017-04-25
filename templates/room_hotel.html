@@ -47,6 +47,7 @@ Hotel Detail
             <tr>
                 <td><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ room.room_no }}">ads:{{ room.room_no }}</td>
                 <!-- <td><input type="submit" value="Order" name="order" id="order" /></td> -->
+
                 <td><img src="{% static "images/rooms/hid_19_room_1.jpg" %}" height="100" width="100"></td>
                 <td><label>{{ room.type }}</label></td>
                 <td><label>{{ room.price }}</label></td>

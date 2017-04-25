@@ -24,10 +24,10 @@ Hotels
     {% if hotels %}
         <table border="1">
             <tr>
-                <th>Choice</th>
-                <th>Name</th>
+                <th>Hotel Name</th>
                 <th>State</th>
                 <th>City</th>
+                <th>Address</th>
                 <th>Type</th>
                 <th>Description</th>
             </tr>
@@ -36,6 +36,7 @@ Hotels
                 <td><a href="/room_hotel/{{ hotel.hotel_id }}/">{{ hotel.name }}</a></td>
                 <td><label>{{ hotel.state }}</label></td>
                 <td><label>{{ hotel.city }}</label></td>
+                <td><label>{{ hotel.address }}</label></td>
                 <td><label>{{ hotel.type }}</label></td>
                 <td><label>{{ hotel.description }}</label></td>
                 <input type="hidden" id="hid" name="hid" value="{{ hotel.hotel_id }}" />
