@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block user_status %}
+
+{% endblock %}
+{% block head %}
+    <script>
+
+    </script>
+{% endblock %}
+{% block title %}
+Hotel Search
+{% endblock %}
+{% block content %}
+    {% if order_status %}
+    <form action="{% url 'comfirm_hotel_order' %}" method="post">{% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>
+                    <label>Order Detail</label>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Date</label></td>
+                <td>From {{ checkin }} to {{ checkout }}. <br>{{ period }} day(s)</td>
+            </tr>
+            <tr>
+                <td><label>Hotel Name</label></td>
+                <td>{{ ohotel.name }}</td>
+            </tr>
+            <tr>
+                <td><label>Type</label></td>
+                <td>{{ ohotel.type }}</td>
+            </tr>
+            <tr>
+                <td><label>Address</label></td>
+                <td>{{ ohotel.address }}, {{ ohotel.city }}, {{ ohotel.state }}</td>
+            </tr>
+            <tr>
+                <td><label>Room type</label></td>
+                <td>{{ oroom.type }}</td>
+            </tr>
+        </table>
+
+        <table border="2">
+            <tr>
+                Order Summary
+            </tr>
+            <tr>
+                <td>123</td>
+                <td>123</td>
+            </tr>
+        </table>
+        <input type="hidden" id="hid" name="hid" value="{{ ohotel.hotel_id }}" />
+        <input type="hidden" id="choice" name="choice" value="{{ oroom.room_no }}" />
+        <input type="hidden" id="indate" name="indate" value="{{ checkin }}" />
+        <input type="hidden" id="outdate" name="outdate" value="{{ checkout }}" />
+        <input type="submit" id="submit" name="submit" value="Submit" />
+    </form>
+    {% endif %}
+
+{% endblock %}
