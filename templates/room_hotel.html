@@ -19,6 +19,7 @@ Hotel Detail
 {% block content %}
 <h1>Hotels</h1>
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
+    
     <form action="{% url "order_hotel" %}" method="post">
     {% if hotel_room %}
         <table>
