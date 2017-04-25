@@ -1,10 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block user_status %}
 
-</body>
-</html>
+{% endblock %}
+{% block head %}
+    <script>
+        $(function() {
+            $("#scity").autocomplete({
+                source: "/get_citys/",
+                minLength: 2,
+            });
+        });
+    </script>
+{% endblock %}
+{% block title %}
+Hotels
+{% endblock %}
+
+{% block content %}
+<h1>Hotels</h1>
+    <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
+    <form action="{% url "signin" %}" method="post">
+    {% if hotels %}
+        <table border="1">
+            <tr>
+                <th>Hotel Name</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+        {% for hotel in hotels %}
+            <tr>
+                <td><a href="/room_hotel/{{ hotel.hotel_id }}/">{{ hotel.name }}</a></td>
+                <td><label>{{ hotel.state }}</label></td>
+                <td><label>{{ hotel.city }}</label></td>
+                <td><label>{{ hotel.address }}</label></td>
+                <td><label>{{ hotel.type }}</label></td>
+                <td><label>{{ hotel.description }}</label></td>
+                <input type="hidden" id="hid" name="hid" value="{{ hotel.hotel_id }}" />
+            </tr>
+        {% endfor %}
+        </table>
+
+    {% endif %}
+
+    </form>
+{% endblock %}

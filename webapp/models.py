@@ -29,7 +29,7 @@ class Hotel_Detail(models.Model):
 
 class Hotel_Room(models.Model):
     # PK: auto generated
-    room_no = models.CharField(max_length=5)
+    room_no = models.CharField(max_length=5, primary_key=True)
     hotel = models.ForeignKey(Hotel_Detail, on_delete=models.CASCADE)
     type = models.CharField(max_length=10)
     price = models.FloatField()
@@ -42,8 +42,8 @@ class Hotel_Room(models.Model):
 class Hotel_Order(models.Model):
     # PK: auto generated
     hotel_room = models.ForeignKey(Hotel_Room, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    user = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
+    indate = models.DateField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Train(models.Model):

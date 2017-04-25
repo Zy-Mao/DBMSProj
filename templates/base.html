@@ -4,21 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% block head %}
 
-    {% endblock %}
     <!-- css files added by Ma -->
     <link rel="stylesheet" type="text/css" href="{% static "css/css.css" %}" media="screen" />
     <link rel="stylesheet" type="text/css" href="{% static "css/font.css" %}" media="screen" />
     <link rel="stylesheet" type="text/css" href="{% static "css/w3.css" %}" media="screen" />
     <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}" type="text/css" media="all" />
-    <script src="{% static "js/jquery-ui.min.js" %}" type="text/javascript">
 
-    </script>
     <script src="{% static "js/jquery.min.js" %}" type="text/javascript">
 
     </script>
+    <script src="{% static "js/jquery-ui.min.js" %}" type="text/javascript">
 
+    </script>
+
+
+    {% block head %}
+
+    {% endblock %}
     <title>{% block title %}
     CS542 Project
     {% endblock %}</title>

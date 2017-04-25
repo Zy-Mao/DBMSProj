@@ -8,6 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from datetime import datetime
+from datetime import timedelta
+from django.db import connection
 import json
 # Create your views here.
 
@@ -140,6 +144,98 @@ def get_citys(request):
 
 
 @csrf_exempt
+def search_hotel(request):
+    try:
+        hcity = request.POST['scity']
+
+        htype = request.POST['htype']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+
+    if hcity == '':
+        hotels = Hotel_Detail.objects.all()
+    else:
+        hotels = Hotel_Detail.objects.filter(city=hcity)
+
+    if htype != '0':
+        hotels = hotels.filter(type=htype)
+    # hotels = Hotel_Detail.objects.filter(type__exact=htype)
+    return render(request, "hotel_list.html", {"hotels": hotels, "a":htype, "b":hcity})
+
+
+def room_hotel(request, hid):
+    hotel = Hotel_Detail.objects.get(hotel_id=hid)
+
+    hotel_room = Hotel_Room.objects.filter(hotel=hotel)
+
+    return render(request, "room_hotel.html", {"hotel_room": hotel_room, "hotel": hotel})
+
+
+@csrf_exempt
+def order_hotel(request):
+    try:
+        hid = request.POST['hid']
+        rid = request.POST['choice']
+        user = request.user
+        checkin = request.POST['indate']
+        checkout = request.POST['outdate']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    checkin = datetime.strptime(checkin, '%Y-%m-%d')
+    checkout = datetime.strptime(checkout, '%Y-%m-%d')
+
+
+    days = checkout - checkin
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        if not checkhotelorder(rid, ddate):
+            return render(request, "room_hotel.html", {"order_status": 0})
+
+    ohotel = Hotel_Detail.objects.get(hotel_id=hid)
+    oroom = Hotel_Room.objects.get(room_no=rid)
+
+    return render(request, "confirm_hotel_order.html",
+                  {"order_status": 1, "ohotel": ohotel, "oroom": oroom,
+                   "checkin": checkin.strftime('%Y-%m-%d'), "checkout": checkout.strftime('%Y-%m-%d'),
+                   "period": days.days})
+
+# date should be yyyy-mm-dd
+# rid: room_id
+def checkhotelorder(rid, checkin):
+    with connection.cursor() as cursor:
+        cursor.execute("select 1 from webapp_hotel_order t where t.indate = to_date(%s, \'yyyy-mm-dd\') and t.hotel_room_id = %s", [checkin, rid])
+        row = cursor.fetchone()
+    if row == None:
+        return True
+    else:
+        return False
+
+@csrf_exempt
+def comfirm_hotel_order(request):
+    try:
+        hid = request.POST['hid']
+        rid = request.POST['choice']
+        user = request.user
+        checkin = request.POST['indate']
+        checkout = request.POST['outdate']
+    except Exception:
+        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+    checkin = datetime.strptime(checkin, '%Y-%m-%d')
+    checkout = datetime.strptime(checkout, '%Y-%m-%d')
+
+    days = checkout - checkin
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        ho = Hotel_Order(hotel_room_id=rid, indate=ddate, user_id=user.id)
+        ho.save()
+    return render(request, "info.html", {"isSuccess": 1, "info_msg": "Order Successfully!"})
+
+
+@csrf_exempt
 def search_trains(request):
     result_list = []
     for train in Train.objects.all():
@@ -153,3 +249,4 @@ def search_trains(request):
             result_list.append((departure_train_schedule, arrival_train_schedule))
 
     return render(request, "hotel_list.html", {"result_list": result_list})
+

@@ -22,11 +22,14 @@ urlpatterns = [
     url(r'^navigator/(?P<direction>[\w\-]+)/$', navigator, name='navigator'), # parameter name should be the same in the views.py
     url(r'^account_navigator/(?P<direction>[\w\-]+)/$', account_navigator, name='account_navigator'),
     url(r'^$', default),
-    url(r'^get_citys/', get_citys, name='get_citys'),
+    url(r'^get_citys/$', get_citys, name='get_citys'),
+    url(r'^confirm_hotel_order/$', comfirm_hotel_order, name='comfirm_hotel_order'),
     url(r'^register/$', register, name='register'),
+    url(r'^orderhotel/$', order_hotel, name='order_hotel'),
     url(r'^search_trains/$', search_trains, name='search_trains'),
     url(r'^signin/$', signin, name='signin'),
     url(r'^user_modify', user_modify, name="user_modify"),
+    url(r'^search_hotel/$', search_hotel, name="search_hotel"),
+    url(r'^room_hotel/(?P<hid>[\w\-]+)/$', room_hotel, name="room_hotel"),
     url(r'^pwd_modify', pwd_modify, name="pwd_modify"),
-
 ]
