@@ -151,7 +151,9 @@ def search_hotel(request):
 
         htype = request.POST['htype']
     except Exception:
-        raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+        hcity = request.GET.get('scity')
+
+        htype = request.GET.get('htype')
 
     if hcity == '':
         hotels = Hotel_Detail.objects.all()
@@ -160,8 +162,18 @@ def search_hotel(request):
 
     if htype != '0':
         hotels = hotels.filter(type=htype)
+
+    paginator = Paginator(hotels, 10)
+
+    page = request.GET.get('page')
+    try:
+        hotels_list = paginator.page(page)
+    except PageNotAnInteger:
+        hotels_list = paginator.page(1)
+    except EmptyPage:
+        hotels_list = paginator.page(paginator.num_pages)
     # hotels = Hotel_Detail.objects.filter(type__exact=htype)
-    return render(request, "hotel_list.html", {"hotels": hotels, "a":htype, "b":hcity})
+    return render(request, "hotel_list.html", {"hotels": hotels_list, "a":htype, "b":hcity})
 
 
 def room_hotel(request, hid):

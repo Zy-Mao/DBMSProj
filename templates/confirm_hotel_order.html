@@ -4,9 +4,7 @@
 
 {% endblock %}
 {% block head %}
-    <script>
 
-    </script>
 {% endblock %}
 {% block title %}
 Hotel Search
@@ -47,8 +45,16 @@ Hotel Search
                 Order Summary
             </tr>
             <tr>
-                <td>123</td>
-                <td>123</td>
+                <td>Item</td>
+                <td>$ {{ oroom.price }}</td>
+            </tr>
+            <tr>
+                <td>Nights</td>
+                <td>{{ period }}</td>
+            </tr>
+            <tr>
+                <td>Order total</td>
+                <td>$ <input type="text" id="order_summary" name="order_summary" readonly="readonly"/></td>
             </tr>
         </table>
         <input type="hidden" id="hid" name="hid" value="{{ ohotel.hotel_id }}" />
@@ -58,5 +64,12 @@ Hotel Search
         <input type="submit" id="submit" name="submit" value="Submit" />
     </form>
     {% endif %}
+<script>
+        function calTotal(){
+            var total = {{ oroom.price }} * {{ period }};
+            $("#order_summary").val(total);
+        }
 
+        document.getElementsByTagName('body')[0].onload = calTotal();
+</script>
 {% endblock %}
