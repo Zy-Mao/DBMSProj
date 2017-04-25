@@ -12,6 +12,7 @@ from django.db.models import Q
 from datetime import datetime
 from datetime import timedelta
 from django.db import connection
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 # Create your views here.
 
