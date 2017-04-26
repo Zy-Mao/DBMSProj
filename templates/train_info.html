@@ -7,31 +7,40 @@ Train Info
 			{% if train and train_time_table_set%}
 				<form action="{% url 'order_train' %}" method="post">{% csrf_token %}
 					<p>{{ train.train_no }}</p>
+					<p>{{ train_schedule_date }}</p>
 					<table border="1">
 								<tr>
 										<th>Arrival City</th>
 										<th>Arrival Time</th>
-										<th></th>
+{#										<th></th>#}
 								</tr>
 						{% for t in train_time_table_set %}
 								<tr>
 										<td><label>{{ t.arrival_city }}</label></td>
 										<td><label>{{ t.arrival_time }}</label></td>
 										<td>
+										{% if t.arrival_city == departure_train_schedule.arrival_city %}
+											<label>Departure City</label>
+										{% endif %}
 										{% if t.arrival_city == arrival_train_schedule.arrival_city %}
-												<label for="ticket_amount">Ticket Amount:</label>
-												<input id="ticket_amount" name="ticket_amount" type="number" value="1"/>
-												<input type="hidden" id="dtid"
-															 name="dtid" value="{{ departure_train_schedule.id }}" />
-												<input type="hidden" id="atid"
-															 name="atid" value="{{ arrival_train_schedule.id }}" />
+											<label>Arrival City</label>
 										{% endif %}
 										</td>
 								</tr>
 						{% endfor %}
 					</table>
+				<div>
+					<label for="ticket_amount">Ticket Needed:</label>
+					<input id="ticket_order_amount" name="ticket_order_amount" type="number" value="1"/>
+					<input type="hidden" id="dtid"
+								 name="dtid" value="{{ departure_train_schedule.id }}" />
+					<input type="hidden" id="atid"
+								 name="atid" value="{{ arrival_train_schedule.id }}" />
+					<input type="hidden" id="date"
+								 name="train_schedule_date" value="{{ train_schedule_date }}" />
+				</div>
+				<input class="w3-button w3-dark-grey" type="submit" value="Place Order">
 				</form>
 			{% endif %}
-			<input class="w3-button w3-dark-grey" type="submit" value="Place Order">
     </div>
 {% endblock %}
