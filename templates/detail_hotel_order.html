@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block user_status %}
+
+{% endblock %}
+{% block head %}
+
+{% endblock %}
+{% block title %}
+Hotel Search
+{% endblock %}
+{% block content %}
+    {% if order_status %}
+    <form action="{% url 'comfirm_hotel_order' %}" method="post">{% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>
+                    <label>Order Detail</label>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Date</label></td>
+                <td>From {{ checkin }} to {{ checkout }}. <br>{{ period }} day(s)</td>
+            </tr>
+            <tr>
+                <td><label>Hotel Name</label></td>
+                <td>{{ ohotel.name }}</td>
+            </tr>
+            <tr>
+                <td><label>Type</label></td>
+                <td>{{ ohotel.type }}</td>
+            </tr>
+            <tr>
+                <td><label>Address</label></td>
+                <td>{{ ohotel.address }}, {{ ohotel.city }}, {{ ohotel.state }}</td>
+            </tr>
+            <tr>
+                <td><label>Room type</label></td>
+                <td>{{ oroom.type }}</td>
+            </tr>
+            <tr>
+                <td><label>Room Description</label></td>
+                <td>{{ oroom.description }}</td>
+            </tr>
+        </table>
+
+        <table border="2">
+            <tr>
+                Order Summary
+            </tr>
+            <tr>
+                <td>Item</td>
+                <td>$ {{ oroom.price }}</td>
+            </tr>
+            <tr>
+                <td>Nights</td>
+                <td>{{ period }}</td>
+            </tr>
+            <tr>
+                <td>Order total</td>
+                <td>$ <input type="text" style="text-align: right;" id="order_summary" name="order_summary" readonly="readonly"/></td>
+            </tr>
+        </table>
+    </form>
+    {% endif %}
+
+{% endblock %}

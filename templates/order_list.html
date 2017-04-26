@@ -7,17 +7,24 @@ Order List
     {% if not user.is_authenticated %}
         <h3>You need sign in to get access to your order information.</h3>
     {% else %}
-        <table>
-            <tr>
-                <th>Order ID</th>
-                <th>Order Type</th>
-                <th>Total Amount</th>
-                <th>Order Date</th>
-            </tr>
-            <tr>
-                <td></td>
-            </tr>
-        </table>
+        {% if orders %}
+            <table border="1">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Type</th>
+                    <th>Total Amount</th>
+                    <th>Order Date</th>
+                </tr>
+            {% for order in orders %}
+                <tr>
+                    <td><a href="/room_hotel/{{ hotel.hotel_id }}/">{{ hotel.name }}</a></td>
+                    <td>{{ order.order_type }}</td>
+                    <td>{{ order.total_amount }}</td>
+                    <td>{{ order.order_date }}</td>
+                 </tr>
+            {% endfor %}
+            </table>
+        {% endif %}
     {% endif %}
 
     </div>
