@@ -44,7 +44,23 @@ Hotels
         {% endfor %}
         </table>
 
-    {% endif %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if hotels.has_previous %}
+                    <a href="?page={{ hotels.previous_page_number }}?scity={{ b }}?htype={{ a }}">previous</a>
+               {% endif %}
+            </span>
+            <span class="current">
+                Page {{ hotels.number }} of {{ hotels.paginator.num_pages }}
+            </span>
 
+            {% if hotels.has_next %}
+                <a href="?page={{ hotels.next_page_number }}?scity={{ b }}?htype={{ a }}">next</a>
+            {% endif %}
+        </div>
+
+    {% endif %}
+    <input type="hidden" name="scity" id="scity" value="{{ b }}" />
+    <input type="hidden" name="htype" id="htype" value="{{ a }}" />
     </form>
 {% endblock %}

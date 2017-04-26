@@ -19,7 +19,28 @@ Hotel Detail
 {% block content %}
 <h1>Hotels</h1>
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
+    {% if hotel %}
+        <table border="1">
+            <tr>
+                <td>Hotel Name</td>
+                <td>{{ hotel.name }}</td>
+            </tr>
+            <tr>
+                <td>Hotel Address</td>
+                <td>{{ hotel.address }}, {{ hotel.city }}, {{ hotel.state }}</td>
+            </tr>
+            <tr>
+                <td>Hotel Description</td>
+                <td>{{ hotel.description }}</td>
+            </tr>
+            <tr>
+                <td>Hotel Type</td>
+                <td>{{ hotel.type }}</td>
+            </tr>
+        </table>
+    {% endif %}
     <form action="{% url "order_hotel" %}" method="post">
+
     {% if hotel_room %}
         <table>
             <tr>

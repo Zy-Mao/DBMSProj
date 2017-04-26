@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+Order List
+{% endblock %}
+{% block content %}
+<div class="w3-content" style="max-width:1100px;">
+    {% if not user.is_authenticated %}
+        <h3>You need sign in to get access to your order information.</h3>
+    {% else %}
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Type</th>
+                <th>Total Amount</th>
+                <th>Order Date</th>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+    {% endif %}
+
+    </div>
+</div>
+{% endblock %}

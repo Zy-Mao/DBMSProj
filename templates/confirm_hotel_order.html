@@ -4,9 +4,7 @@
 
 {% endblock %}
 {% block head %}
-    <script>
 
-    </script>
 {% endblock %}
 {% block title %}
 Hotel Search
@@ -40,6 +38,10 @@ Hotel Search
                 <td><label>Room type</label></td>
                 <td>{{ oroom.type }}</td>
             </tr>
+            <tr>
+                <td><label>Room Description</label></td>
+                <td>{{ oroom.description }}</td>
+            </tr>
         </table>
 
         <table border="2">
@@ -47,16 +49,33 @@ Hotel Search
                 Order Summary
             </tr>
             <tr>
-                <td>123</td>
-                <td>123</td>
+                <td>Item</td>
+                <td>$ {{ oroom.price }}</td>
+            </tr>
+            <tr>
+                <td>Nights</td>
+                <td>{{ period }}</td>
+            </tr>
+            <tr>
+                <td>Order total</td>
+                <td>$ <input type="text" style="text-align: right;" id="order_summary" name="order_summary" readonly="readonly"/></td>
             </tr>
         </table>
         <input type="hidden" id="hid" name="hid" value="{{ ohotel.hotel_id }}" />
         <input type="hidden" id="choice" name="choice" value="{{ oroom.room_no }}" />
         <input type="hidden" id="indate" name="indate" value="{{ checkin }}" />
         <input type="hidden" id="outdate" name="outdate" value="{{ checkout }}" />
-        <input type="submit" id="submit" name="submit" value="Submit" />
+        <br><br>
+        <input type="submit" id="submit" name="submit" value="Submit" />&nbsp&nbsp&nbsp
+        <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
     </form>
     {% endif %}
+<script>
+        function calTotal(){
+            var total = {{ oroom.price }} * {{ period }};
+            $("#order_summary").val(total);
+        }
 
+        document.getElementsByTagName('body')[0].onload = calTotal();
+</script>
 {% endblock %}

@@ -38,12 +38,18 @@ class Hotel_Room(models.Model):
     class Meta:
         unique_together = (('room_no', 'hotel'),)
 
+class Order(models.Model):
+    order_type = models.CharField(max_length=1)
+    total_amount = models.FloatField()
+    user_id = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
+    order_date = models.DateField()
 
 class Hotel_Order(models.Model):
     # PK: auto generated
     hotel_room = models.ForeignKey(Hotel_Room, on_delete=models.CASCADE)
     indate = models.DateField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_id = models.IntegerField()
 
 
 class Train(models.Model):
