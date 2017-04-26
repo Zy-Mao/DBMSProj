@@ -17,7 +17,8 @@ import json
 
 
 def default(request):
-    return render(request, "main.html")
+    city_list = City.objects.all()
+    return render(request, "main.html", {"city_list": city_list})
 
 def navigator(request, direction):
     try:
@@ -25,7 +26,8 @@ def navigator(request, direction):
     except ValueError:
         raise Http404
     if to == 'home':
-        return render(request, "main.html")
+        city_list = City.objects.all()
+        return render(request, "main.html", {"city_list": city_list})
     elif to == 'account':
         return render(request, "account_info.html")
     elif to == 'travel':
@@ -238,15 +240,41 @@ def comfirm_hotel_order(request):
 @csrf_exempt
 def search_trains(request):
     result_list = []
+    departure_city = City.objects.filter(cid=request.POST.get('dp', False)).first()
+    arrival_city = City.objects.filter(cid=request.POST.get('ar', False)).first()
+    print(request.POST.get('dd', False))
+    # date checking
     for train in Train.objects.all():
         try:
-            departure_train_schedule = train.train_schedule_set.get(arrival_city=request.POST['departure-city'])
-            arrival_train_schedule = train.train_schedule_set.get(arrival_city=request.POST['arrival-city'])
+            train_schedule = train.train_schedule_set
+            departure_train_schedule = train_schedule.filter(arrival_city=departure_city.city)
+            arrival_train_schedule = train_schedule.filter(arrival_city=arrival_city.city)
         except ValueError:
             raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
-        if departure_train_schedule is not None and arrival_train_schedule is not None \
-                and arrival_train_schedule.arrival_time > departure_train_schedule.arrival_time:
-            result_list.append((departure_train_schedule, arrival_train_schedule))
+        if departure_train_schedule.count() > 0 and arrival_train_schedule.count() > 0 \
+                and arrival_train_schedule.first().arrival_time > departure_train_schedule.first().arrival_time:
+            train_info_url = str(departure_train_schedule.first().id) + "_" + str(arrival_train_schedule.first().id)
+            result_list.append((train_info_url, departure_train_schedule.first(), arrival_train_schedule.first(),
+                                arrival_train_schedule.first().price - departure_train_schedule.first().price))
 
-    return render(request, "hotel_list.html", {"result_list": result_list})
+    return render(request, "train_list.html", {"result_list": result_list})
 
+@csrf_exempt
+def train_info(request, train_info_url):
+    departure_train_schedule_id = train_info_url.split('_')[0]
+    arrival_train_schedule_id = train_info_url.split('_')[1]
+    departure_train_schedule = Train_Schedule.objects.filter(id=departure_train_schedule_id).first()
+    arrival_train_schedule = Train_Schedule.objects.filter(id=arrival_train_schedule_id).first()
+    train_time_table_set = departure_train_schedule.train.train_schedule_set.all()
+
+    return render(request, "train_info.html", {"train" : departure_train_schedule.train,
+                                               "train_time_table_set": train_time_table_set,
+                                               "departure_train_schedule" : departure_train_schedule,
+                                               "arrival_train_schedule" : arrival_train_schedule})
+
+@csrf_exempt
+def order_train(request):
+    # Train_Sub_Order.objects.filter(depa)
+    request.POST.get('dtid', False)
+
+    return render(request, "confirm_train_order.html", {})

@@ -50,8 +50,12 @@ class Train(models.Model):
     train_no = models.CharField(max_length=10, primary_key=True)
     departure_city = models.CharField(max_length=20)
     arrival_city = models.CharField(max_length=20)
+    departure_time = models.DateField(null=True)
     type = models.CharField(max_length=10)
     ticket_amount = models.IntegerField()
+
+    def __str__(self):
+        return self.train_no + ", From " + self.departure_city + ", To " + self.arrival_city
 
 
 class Train_Schedule(models.Model):
@@ -59,6 +63,9 @@ class Train_Schedule(models.Model):
     arrival_city = models.CharField(max_length=20)
     price = models.FloatField()
     arrival_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.train.train_no + ", To " + self.arrival_city
 
 
 class Train_Order(models.Model):
@@ -78,3 +85,7 @@ class City(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     abb_state = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.city + ", " + self.state + ", " + self.abb_state
+

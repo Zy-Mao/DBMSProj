@@ -20,16 +20,31 @@ Travel
 						<div class="w3-row-padding" style="margin:8px -16px;">
 							<div class="w3-half">
 								<label>Departure City</label>
-								<input class="w3-input w3-border" name="departure-city" type="text" placeholder="Departing from">
+									<select class="selectpicker" name="dp" data-live-search="true" title="Select departure city..." data-width="100%"
+													data-show-subtext="true">
+										{% if city_list %}
+											{% for city in city_list %}
+												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>
+											{% endfor %}
+										{% endif %}
+									</select>
 							</div>
 							<div class="w3-half">
 								<label>Arrival City</label>
-								<input class="w3-input w3-border" name="arrival-city" type="text" placeholder="Arriving at">
+								<select class="selectpicker" name="ar" data-live-search="true" title="Select arrival city..." data-width="100%"
+													data-show-subtext="true">
+										{% if city_list %}
+											{% for city in city_list %}
+												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>
+											{% endfor %}
+										{% endif %}
+									</select>
+{#								<input class="w3-input w3-border" name="arrival-city" type="text" placeholder="Arriving at">#}
 							</div>
 						</div>
 						<div class="w3-row-padding" style="margin:8px -16px;">
             <div class="w3-half">
-              <input class="w3-input w3-border" type="date" name="departure-date" value="2017-05-01">
+              <input class="w3-input w3-border" type="date" name="dd" value="2017-05-08">
             </div>
             <div class="w3-half">
 {#                <button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button>#}
@@ -50,12 +65,12 @@ Travel
     </header>
 
     <!-- Content -->
-    <div class="w3-content" style="max-width:1100px;">
+    <div class="w3-content" style="max-width:1100px; z-index:-1">
       <div class="w3-container w3-margin-top">
         <h3>Good Offers Right Now</h3>
         <h6>Up to <strong>50%</strong> discount.</h6>
       </div>
-      <div class="w3-row-padding w3-text-white w3-large">
+      <div class="w3-row-padding w3-text-white w3-large" style="z-index:-1">
         <div class="w3-half w3-margin-bottom">
           <div class="w3-display-container">
             <img src="{% static "images/pic1.jpg" %}" alt="Switzerland" style="width:100%">
