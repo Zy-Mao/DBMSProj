@@ -178,7 +178,7 @@ def search_hotel(request):
     else:
         hotels = Hotel_Detail.objects.filter(city=hcity)
 
-    if htype != '0':
+    if htype != 'ALL':
         hotels = hotels.filter(type=htype)
 
     paginator = Paginator(hotels, 10)
