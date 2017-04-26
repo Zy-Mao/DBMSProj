@@ -24,7 +24,7 @@ Hotels
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
     <form action="{% url "signin" %}" method="post">
     {% if hotels %}
-        <table border="1">
+        <table class="w3-table-all">
             <tr>
                 <th>Hotel Name</th>
                 <th>State</th>
@@ -57,7 +57,7 @@ Hotels
             </span>
 
             {% if hotels.has_next %}
-                <a href="?page={{ hotels.next_page_number }}?scity={{ b }}?htype={{ a }}">next</a>
+                <a href="?page={{ hotels.next_page_number }}&scity={{ b }}&htype={{ a }}">next</a>
             {% endif %}
         </div>
 

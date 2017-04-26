@@ -59,7 +59,33 @@ Travel
           <h3>Find the best hotels</h3>
           <p>Book a hotel with us and get the best fares and promotions.</p>
           <p>We know hotels - we know comfort.</p>
-          <p><button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Search Hotels</button></p>
+            <form action="{% url 'search_hotel' %}" method="post">{% csrf_token %}
+        <div class="w3-row-padding" style="margin:8px -16px;">
+            <div class="w3-half">
+                    <div class="ui-widget">
+                        <label for="scity">City</label>
+                        <input id="scity" class="w3-input w3-border" name="scity">
+                    </div>
+            </div>
+
+            <div class="w3-half">
+                <div class="ui-widget">
+                <label>Type</label>
+                    <select class="selectpicker" id="htype" name="htype">
+                        <option value="0">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    </div>
+            </div>
+        </div>
+                    <input class="w3-button w3-dark-grey" type="submit" id="submit" name="submit" value="submit" />
+
+    </form>
+{#          <p><button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Search Hotels</button></p>#}
         </div>
       </div>
     </header>
@@ -155,6 +181,13 @@ Travel
         }
         // Click on the first tablink on load
         document.getElementsByClassName("tablink")[0].click();
+
+        $(function() {
+            $("#scity").autocomplete({
+                source: "/get_citys/",
+                minLength: 2,
+            });
+        });
     </script>
 
 {% endblock %}

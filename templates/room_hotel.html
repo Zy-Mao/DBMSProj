@@ -4,14 +4,7 @@
 
 {% endblock %}
 {% block head %}
-    <script>
-        $(document).ready(function(){
-            var date = new Date();
-            var day = date.getDate()
-            $('#indate').val(new Date().toDateInputValue());
-        });
 
-    </script>
 {% endblock %}
 {% block title %}
 Hotel Detail
@@ -21,7 +14,7 @@ Hotel Detail
 <h1>Hotels</h1>
     <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
     {% if hotel %}
-        <table border="1">
+        <table class="w3-table-all">
             <tr>
                 <td>Hotel Name</td>
                 <td>{{ hotel.name }}</td>
@@ -40,24 +33,24 @@ Hotel Detail
             </tr>
         </table>
     {% endif %}
-    <form action="{% url "order_hotel" %}" method="post">
+    <form action="{% url "order_hotel" %}" method="post" onsubmit="return validateForm()">
 
     {% if hotel_room %}
-        <table>
+        <table class="w3-table-all">
             <tr>
                 <td>Check in</td>
                 <td>Check out</td>
             </tr>
             <tr>
                 <td>
-                    <input type="date" name="indate" id="indate" value="2017-04-24" />
+                    <input type="date" name="indate" id="indate" />
                 </td>
                 <td>
-                    <input type="date" name="outdate" id="outdate" value="2017-04-25" />
+                    <input type="date" name="outdate" id="outdate" />
                 </td>
             </tr>
         </table>
-        <table border="1">
+        <table class="w3-table-all">
             <tr>
                 <th>Choice</th>
                 <th>Overview</th>
@@ -90,4 +83,44 @@ Hotel Detail
     {% endif %}
 
     </form>
+
+    <script>
+        $(document).ready(function(){
+            var today = new Date();
+            var nextday = new Date();
+            var dd = today.getDate();
+            var dd2 = today.getDate() + 1;
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if(dd<10) {
+                dd='0'+dd
+            }
+
+            if(dd2<10) {
+                dd2='0'+dd2
+            }
+
+            if(mm<10) {
+                mm='0'+mm
+            }
+
+            today = yyyy + '-' + mm+'-'+dd;
+            nextday = yyyy + '-' + mm+'-'+dd2;
+            $('#indate').val(today);
+
+            $('#outdate').val(nextday);
+
+            // $('#choice1').check();
+        });
+
+        function validateForm() {
+            var r = $('input:radio[name=choice]').is(':checked');
+            if(!r){
+                alert("Please select a room!");
+                return false;
+            }
+            return true;
+        }
+    </script>
 {% endblock %}
