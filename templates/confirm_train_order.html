@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}
+Order Infomation
+{% endblock %}
+{% block content %}
+    <div class="w3-content" style="max-width:1100px;">
+			{% if train_order_info %}
+				<p>{{ train_order_info.transaction_date }}</p>
+					<table border="1">
+								<tr>
+									<th>Ticket NO</th>
+									<th>Train NO</th>
+									<th>Date</th>
+									<th>Departure City</th>
+									<th>Departure Time</th>
+									<th>Arrival City</th>
+									<th>Arrival Time</th>
+{#									<th></th>#}
+								</tr>
+						{% for train_sub_order, price in train_sub_order_list %}
+								<tr>
+										<td><label>{{ train_sub_order.order_no }}</label></td>
+										<td><label>{{ train_sub_order.departure_city.train.train_no }}</label></td>
+										<td><label>{{ train_sub_order.date }}</label></td>
+										<td><label>{{ train_sub_order.departure_city.arrival_city }}</label></td>
+										<td><label>{{ train_sub_order.departure_city.arrival_time }}</label></td>
+										<td><label>{{ train_sub_order.arrival_city.arrival_city }}</label></td>
+										<td><label>{{ train_sub_order.arrival_city.arrival_time }}</label></td>
+{#										<td><label>{{ price }}</label></td>#}
+								</tr>
+						{% endfor %}
+					</table>
+				<div>
+					<label>Ticket price:</label>
+					<input type="number" value="{{ single_price }}"/>
+					<label>Ticket Order Amount:</label>
+					<input type="number" value="{{ ticket_order_amount }}"/>
+					<label>Total Price:</label>
+					<input type="number" value="{{ total_price }}"/>
+				</div>
+			{% endif %}
+			<input class="w3-button w3-dark-grey" type="submit" value="Place Order">
+    </div>
+{% endblock %}

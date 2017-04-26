@@ -3,6 +3,18 @@
 {% block title %}
 Travel
 {% endblock %}
+
+{% block head %}
+    <script>
+        $(function() {
+            $("#scity").autocomplete({
+                source: "/get_citys/",
+                minLength: 2,
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
 <!-- Header -->
     <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
@@ -21,7 +33,7 @@ Travel
 							<div class="w3-half">
 								<label>Departure City</label>
 									<select class="selectpicker" name="dp" data-live-search="true" title="Select departure city..." data-width="100%"
-													data-show-subtext="true">
+													data-size="10" data-show-subtext="true">
 										{% if city_list %}
 											{% for city in city_list %}
 												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>
@@ -32,7 +44,7 @@ Travel
 							<div class="w3-half">
 								<label>Arrival City</label>
 								<select class="selectpicker" name="ar" data-live-search="true" title="Select arrival city..." data-width="100%"
-													data-show-subtext="true">
+													data-size="10" data-show-subtext="true">
 										{% if city_list %}
 											{% for city in city_list %}
 												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>
@@ -57,9 +69,63 @@ Travel
 
         <div id="Hotel" class="w3-container w3-white w3-padding-16 myLink">
           <h3>Find the best hotels</h3>
-          <p>Book a hotel with us and get the best fares and promotions.</p>
-          <p>We know hotels - we know comfort.</p>
-          <p><button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Search Hotels</button></p>
+          <form action="{% url 'search_hotel' %}" method="post">{% csrf_token %}
+						<div class="w3-row-padding" style="margin:8px -16px;">
+							<div class="w3-half">
+{#								<div class="ui-widget">#}
+                        <label for="scity">City</label>
+                        <input class="w3-input w3-border" id="scity" name="scity">
+{#                    </div>#}
+{#								<label>Departure City</label>#}
+{#									<select class="selectpicker" name="dp" data-live-search="true" title="Select departure city..." data-width="100%"#}
+{#													data-show-subtext="true">#}
+{#										{% if city_list %}#}
+{#											{% for city in city_list %}#}
+{#												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>#}
+{#											{% endfor %}#}
+{#										{% endif %}#}
+{#									</select>#}
+							</div>
+							<div class="w3-half">
+								<div class="w3-half">
+									<label for="htype">Label</label>
+								<input class="w3-input w3-border" type="text" id="htype" name="htype" list="htype_datalist" autocomplete="false">
+								<datalist id="htype_datalist">
+									<option value="All">
+									<option value="1">
+									<option value="2">
+									<option value="3">
+									<option value="4">
+									<option value="5">
+								</datalist>
+
+{#								<select class="w3-input w3-border" id="htype" name="htype">#}
+{#                        <option value="0">All</option>#}
+{#                        <option value="1">1</option>#}
+{#                        <option value="2">2</option>#}
+{#                        <option value="3">3</option>#}
+{#                        <option value="4">4</option>#}
+{#                        <option value="5">5</option>#}
+{#                    </select>#}
+							</div>
+								<div class="w3-half">
+									<label for="submit">.</label>
+							<input class="w3-button w3-dark-grey w3-border" type="submit" id="submit" name="submit" value="Search" style="width: 100%"/>
+{#              <input class="w3-input w3-border" type="date" name="dd" value="2017-05-08">#}
+            </div>
+							</div>
+
+
+						</div>
+{#						<div class="w3-row-padding" style="margin:8px -16px;">#}
+{#            <div class="w3-half" style="float: right;">#}
+{#                <button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button>#}
+{#							<input class="w3-button w3-dark-grey" type="submit" id="submit" name="submit" value="Search" />#}
+{#                <input class="w3-button w3-dark-grey" type="submit" value="Search">#}
+{#            </div>#}
+{#            </div>#}
+{#          <p><button class="w3-button w3-dark-grey" href="/navigator/{{ "hotel" }}/">Search and find dates</button></p>#}
+					</form>
         </div>
       </div>
     </header>
@@ -72,37 +138,53 @@ Travel
       </div>
       <div class="w3-row-padding w3-text-white w3-large" style="z-index:-1">
         <div class="w3-half w3-margin-bottom">
-          <div class="w3-display-container">
-            <img src="{% static "images/pic1.jpg" %}" alt="Switzerland" style="width:100%">
+{#          <div class="w3-display-container">#}
+					<div>
+            <img src="{% static "images/pic1.jpg" %}" alt="Switzerland" style="width:100%; z-index: -1;">
+						<div class="w3-display-container">
               <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/6/">Zermatt</a></span>
+						</div>
           </div>
         </div>
         <div class="w3-half">
           <div class="w3-row-padding" style="margin:0 -16px">
             <div class="w3-half w3-margin-bottom">
-              <div class="w3-display-container">
+{#              <div class="w3-display-container">#}
+							<div>
                 <img src="{% static "images/pic2.jpg" %}" alt="Switzerlnad" style="width:100%">
-                  <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/11/">Pilatus</a></span>
+								<div class="w3-display-container">
+									<span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/11/">Pilatus</a></span>
+								</div>
+
               </div>
             </div>
             <div class="w3-half w3-margin-bottom">
-              <div class="w3-display-container">
+{#              <div class="w3-display-container">#}
+							<div>
                 <img src="{% static "images/pic3.jpg" %}" alt="Rome" style="width:100%">
+								<div class="w3-display-container">
                   <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/26/">Rome</a></span>
+								</div>
               </div>
             </div>
           </div>
           <div class="w3-row-padding" style="margin:0 -16px">
             <div class="w3-half w3-margin-bottom">
-              <div class="w3-display-container">
+{#              <div class="w3-display-container">#}
+							<div>
                 <img src="{% static "images/pic4.jpg" %}" alt="Pisa" style="width:100%">
+								<div class="w3-display-container">
                 <span class="w3-display-bottomleft w3-padding">Pisa</span>
+								</div>
               </div>
             </div>
             <div class="w3-half w3-margin-bottom">
-              <div class="w3-display-container">
+{#              <div class="w3-display-container">#}
+							<div>
                 <img src="{% static "images/pic5.jpg" %}" alt="Paris" style="width:100%">
+								<div class="w3-display-container">
                 <span class="w3-display-bottomleft w3-padding">Paris</span>
+								</div>
               </div>
             </div>
           </div>

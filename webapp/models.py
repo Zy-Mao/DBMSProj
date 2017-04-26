@@ -16,6 +16,9 @@ class User_Detail(models.Model):
     zipcode = models.CharField(max_length=5)
     # registerdate = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Hotel_Detail(models.Model):
     hotel_id = models.AutoField(primary_key=True)
@@ -56,7 +59,7 @@ class Train(models.Model):
     train_no = models.CharField(max_length=10, primary_key=True)
     departure_city = models.CharField(max_length=20)
     arrival_city = models.CharField(max_length=20)
-    departure_time = models.DateField(null=True)
+    # departure_time = models.DateField(null=True)
     type = models.CharField(max_length=10)
     ticket_amount = models.IntegerField()
 
@@ -68,7 +71,7 @@ class Train_Schedule(models.Model):
     train = models.ForeignKey(Train, on_delete=models.CASCADE)
     arrival_city = models.CharField(max_length=20)
     price = models.FloatField()
-    arrival_time = models.DateTimeField()
+    arrival_time = models.TimeField()
 
     def __str__(self):
         return self.train.train_no + ", To " + self.arrival_city
@@ -81,9 +84,10 @@ class Train_Order(models.Model):
 
 class Train_Sub_Order(models.Model):
     order_no = models.AutoField(primary_key=True)
+    date = models.DateField(null=True)
     departure_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE, related_name="departure_train_schedule")
     arrival_city = models.ForeignKey(Train_Schedule, on_delete=models.CASCADE, related_name="arrival_train_schedule")
-    train = models.ForeignKey(Train, on_delete=models.CASCADE)
+    # train = models.ForeignKey(Train, on_delete=models.CASCADE)
 
 
 class City(models.Model):
