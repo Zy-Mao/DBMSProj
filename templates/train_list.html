@@ -6,7 +6,7 @@ Train List
     <div class="w3-content" style="max-width:1100px;">
 		<p>Train Search Result</p>
 		{% if result_list %}
-			<table border="1">
+			<table border="1" style="alignment: center">
             <tr>
 								<th>Train No</th>
                 <th>Departure City</th>
@@ -14,16 +14,18 @@ Train List
                 <th>Departure Time</th>
                 <th>Arrival Time</th>
 								<th>Price</th>
+								<th>Remaining ticket</th>
 								<th></th>
             </tr>
-        {% for train_info_url, departure_city, arrival_city, price in result_list %}
+        {% for train_info_url, departure_city_info, arrival_city_info, price, ticket_remain in result_list %}
             <tr>
-                <td><label>{{ departure_city.train.train_no }}</label></td>
-                <td><label>{{ departure_city.arrival_city }}</label></td>
-                <td><label>{{ arrival_city.arrival_city }}</label></td>
-								<td><label>{{ departure_city.arrival_time }}</label></td>
-                <td><label>{{ arrival_city.arrival_time }}</label></td>
+                <td><label>{{ departure_city_info.train.train_no }}</label></td>
+                <td><label>{{ departure_city_info.arrival_city }}</label></td>
+                <td><label>{{ arrival_city_info.arrival_city }}</label></td>
+								<td><label>{{ departure_city_info.arrival_time }}</label></td>
+                <td><label>{{ arrival_city_info.arrival_time }}</label></td>
                 <td><label>{{ price }}</label></td>
+								<td>{{ ticket_remain }}</td>
 								<td><a href="/train_info/{{ train_info_url }}/">Order</a></td>
             </tr>
         {% endfor %}

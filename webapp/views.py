@@ -12,6 +12,8 @@ from django.db.models import Q
 import time
 from datetime import datetime
 from datetime import timedelta
+from django.utils import timezone
+from django.utils.dateparse import parse_date
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
@@ -44,7 +46,8 @@ def navigator(request, direction):
         return render(request, "register.html")
     elif to == 'signout':
         logout(request)
-        return render(request, "main.html")
+        city_list = City.objects.all()
+        return render(request, "main.html", {"city_list": city_list})
 
 
 @csrf_exempt
@@ -287,22 +290,28 @@ def comfirm_hotel_order(request):
 @csrf_exempt
 def search_trains(request):
     result_list = []
-    departure_city = City.objects.filter(cid=request.POST.get('dp', False)).first()
-    arrival_city = City.objects.filter(cid=request.POST.get('ar', False)).first()
-    print(request.POST.get('dd', False))
-    # date checking
+    departure_city_name = City.objects.filter(cid=request.POST.get('dp', False)).first().city
+    arrival_city_name = City.objects.filter(cid=request.POST.get('ar', False)).first().city
+    date = request.POST.get('dd', False)
+    print(date.split('-')[0], date.split('-')[1], date.split('-')[2])
     for train in Train.objects.all():
         try:
-            train_schedule = train.train_schedule_set
-            departure_train_schedule = train_schedule.filter(arrival_city=departure_city.city)
-            arrival_train_schedule = train_schedule.filter(arrival_city=arrival_city.city)
+            train_schedule_list = train.train_schedule_set
+            departure_train_schedule_list = train_schedule_list.filter(arrival_city=departure_city_name)
+            arrival_train_schedule_list = train_schedule_list.filter(arrival_city=arrival_city_name)
         except ValueError:
             raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
-        if departure_train_schedule.count() > 0 and arrival_train_schedule.count() > 0 \
-                and arrival_train_schedule.first().arrival_time > departure_train_schedule.first().arrival_time:
-            train_info_url = str(departure_train_schedule.first().id) + "_" + str(arrival_train_schedule.first().id)
-            result_list.append((train_info_url, departure_train_schedule.first(), arrival_train_schedule.first(),
-                                arrival_train_schedule.first().price - departure_train_schedule.first().price))
+        if departure_train_schedule_list.count() > 0 and arrival_train_schedule_list.count() > 0 \
+                and arrival_train_schedule_list.first().arrival_time > departure_train_schedule_list.first().arrival_time:
+            ticket_remain = train.ticket_amount - \
+                            Train_Sub_Order.objects.filter(departure_city__train=train, date__year=date.split('-')[0],
+                                                           date__month=date.split('-')[1], date__day=date.split('-')[2]).count()
+            if ticket_remain > 0:
+                train_info_url = str(departure_train_schedule_list.first().id) + "_" + str(arrival_train_schedule_list.first().id) + "_" + \
+                    date.split('-')[0] + "_" + date.split('-')[1] + "_" + date.split('-')[2]
+                result_list.append((train_info_url, departure_train_schedule_list.first(), arrival_train_schedule_list.first(),
+                                    arrival_train_schedule_list.first().price - departure_train_schedule_list.first().price,
+                                    ticket_remain))
 
     return render(request, "train_list.html", {"result_list": result_list})
 
@@ -310,18 +319,50 @@ def search_trains(request):
 def train_info(request, train_info_url):
     departure_train_schedule_id = train_info_url.split('_')[0]
     arrival_train_schedule_id = train_info_url.split('_')[1]
-    departure_train_schedule = Train_Schedule.objects.filter(id=departure_train_schedule_id).first()
-    arrival_train_schedule = Train_Schedule.objects.filter(id=arrival_train_schedule_id).first()
-    train_time_table_set = departure_train_schedule.train.train_schedule_set.all()
+    train_schedule_year = train_info_url.split('_')[2]
+    train_schedule_month = train_info_url.split('_')[3]
+    train_schedule_day = train_info_url.split('_')[4]
+    departure_train_schedule_info = Train_Schedule.objects.filter(id=departure_train_schedule_id).first()
+    arrival_train_schedule_info = Train_Schedule.objects.filter(id=arrival_train_schedule_id).first()
+    train_time_table_set = departure_train_schedule_info.train.train_schedule_set.all().order_by('price')
 
-    return render(request, "train_info.html", {"train" : departure_train_schedule.train,
+    return render(request, "train_info.html", {"train" : departure_train_schedule_info.train,
                                                "train_time_table_set": train_time_table_set,
-                                               "departure_train_schedule" : departure_train_schedule,
-                                               "arrival_train_schedule" : arrival_train_schedule})
+                                               "departure_train_schedule" : departure_train_schedule_info,
+                                               "arrival_train_schedule" : arrival_train_schedule_info,
+                                               "train_schedule_date" : train_schedule_year + "-" + \
+                                                                       train_schedule_month + "-" + train_schedule_day})
 
 @csrf_exempt
 def order_train(request):
-    # Train_Sub_Order.objects.filter(depa)
-    request.POST.get('dtid', False)
+    train_sub_order_list = []
+    user_info = request.user
+    ticket_order_amount = request.POST.get("ticket_order_amount", False)
+    departure_train_schedule_info = Train_Schedule.objects.filter(id=request.POST.get("dtid", False)).first()
+    arrival_train_schedule_info = Train_Schedule.objects.filter(id=request.POST.get("atid", False)).first()
+    train_schedule_date = request.POST.get("train_schedule_date", False)
+    try:
+        user_detail_info = User_Detail.objects.filter(user=user_info).first()
+        if not request.user.is_authenticatedis or user_detail_info is None:
+            return render(request, "info.html", {"isError": 1, "info_msg": "Could not find user, please login."})
+    except Exception:
+        return render(request, "info.html", {"isError": 1, "info_msg": "Could not find user, please login."})
+    train_order_info = Train_Order(user=user_detail_info, transaction_date=timezone.now())
+    train_order_info.save()
+    for i in range(int(ticket_order_amount)):
+        train_sub_order = Train_Sub_Order(date=parse_date(train_schedule_date),
+                                          departure_city=departure_train_schedule_info,
+                                          arrival_city=arrival_train_schedule_info)
+        train_sub_order_list.append((train_sub_order, arrival_train_schedule_info.price - departure_train_schedule_info.price))
+        train_sub_order.save()
 
-    return render(request, "confirm_train_order.html", {})
+    # print(arrival_train_schedule_info.price - departure_train_schedule_info.price)
+
+    return render(request, "confirm_train_order.html", {"train_order_info" : train_order_info,
+                                                        "train_sub_order_list" : train_sub_order_list,
+                                                        "single_price" : arrival_train_schedule_info.price
+                                                                         - departure_train_schedule_info.price,
+                                                        "ticket_order_amount" : ticket_order_amount,
+                                                        "total_price" : float(ticket_order_amount)
+                                                                        * (arrival_train_schedule_info.price
+                                                                           - departure_train_schedule_info.price)})
