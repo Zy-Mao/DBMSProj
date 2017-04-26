@@ -41,7 +41,7 @@ class Hotel_Room(models.Model):
 class Order(models.Model):
     order_type = models.CharField(max_length=1)
     total_amount = models.FloatField()
-    user_id = models.ForeignKey(User_Detail, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateField()
 
 class Hotel_Order(models.Model):
@@ -49,7 +49,7 @@ class Hotel_Order(models.Model):
     hotel_room = models.ForeignKey(Hotel_Room, on_delete=models.CASCADE)
     indate = models.DateField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_id = models.IntegerField()
+    order_id = models.IntegerField(null=True)
 
 
 class Train(models.Model):

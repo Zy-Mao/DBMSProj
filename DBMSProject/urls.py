@@ -34,4 +34,5 @@ urlpatterns = [
     url(r'^search_hotel/$', search_hotel, name="search_hotel"),
     url(r'^room_hotel/(?P<hid>[\w\-]+)/$', room_hotel, name="room_hotel"),
     url(r'^pwd_modify', pwd_modify, name="pwd_modify"),
+    url(r'^orderdetail/(?P<oid>[\w\-]+)/$', hotelOrderDetail, name='hotelOrderDetail'),
 ]

@@ -10,6 +10,7 @@
             var day = date.getDate()
             $('#indate').val(new Date().toDateInputValue());
         });
+
     </script>
 {% endblock %}
 {% block title %}
@@ -66,7 +67,7 @@ Hotel Detail
             </tr>
         {% for room in hotel_room %}
             <tr>
-                <td><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ room.room_no }}">ads:{{ room.room_no }}</td>
+                <td><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ room.room_no }}"></td>
                 <!-- <td><input type="submit" value="Order" name="order" id="order" /></td> -->
 
                 <td><img src="{% static "images/rooms/hid_19_room_1.jpg" %}" height="100" width="100"></td>

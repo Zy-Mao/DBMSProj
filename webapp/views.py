@@ -100,8 +100,18 @@ def account_navigator(request, direction):
         return render(request, "account_info.html", {"show_id": 2, "ud": ud})
     elif to == 'pwdmodify':
         return render(request, "account_info.html", {"show_id": 3})
-    elif to == 'travel':
-        return render(request)
+    elif to == 'order':
+        orders = Order.objects.filter(user_id_id=u.id)
+        return render(request, "order_list.html", {"orders": orders})
+
+
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
 
 
 @login_required(login_url='/navigator/signin/')
@@ -205,7 +215,7 @@ def order_hotel(request):
     for i in range(0, days.days):
         ddate = checkin + timedelta(days=i)
         ddate = ddate.strftime('%Y-%m-%d')
-        if not checkhotelorder(rid, ddate):
+        if not isAvaliableRoom(rid, ddate):
             return render(request, "room_hotel.html", {"order_status": 0})
 
     ohotel = Hotel_Detail.objects.get(hotel_id=hid)
@@ -217,9 +227,20 @@ def order_hotel(request):
                    "period": days.days})
 
 
+def hotelOrderDetail(request, oid):
+    order = Order.objects.get(id=oid)
+    hotel_orders = Hotel_Order.objects.filter(order_id=order.id)
+
+    room = Hotel_Room.objects.get(room_no=hotel_orders[0].hotel_room_id)
+
+    hotel = Hotel_Detail.objects.get(hotel_id=room.hotel_id)
+
+    return render(request, "detail_hotel_order.html", {"oroom": room, "order": order, "ohotel": hotel})
+
+
 # date should be yyyy-mm-dd
 # rid: room_id
-def checkhotelorder(rid, checkin):
+def isAvaliableRoom(rid, checkin):
     with connection.cursor() as cursor:
         cursor.execute("select 1 from webapp_hotel_order t where t.indate = to_date(%s, \'yyyy-mm-dd\') and t.hotel_room_id = %s", [checkin, rid])
         row = cursor.fetchone()
@@ -236,6 +257,7 @@ def comfirm_hotel_order(request):
         user = request.user
         checkin = request.POST['indate']
         checkout = request.POST['outdate']
+        total = request.POST['order_summary']
     except Exception:
         raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
     checkin = datetime.strptime(checkin, '%Y-%m-%d')
@@ -246,7 +268,18 @@ def comfirm_hotel_order(request):
     for i in range(0, days.days):
         ddate = checkin + timedelta(days=i)
         ddate = ddate.strftime('%Y-%m-%d')
-        ho = Hotel_Order(hotel_room_id=rid, indate=ddate, user_id=user.id)
+        if not isAvaliableRoom(rid, ddate):
+            return render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+
+    order_date = time.strftime('%Y-%m-%d')
+    # u = User_Detail.objects.get(user_id=user.id)
+    order = Order(order_type='H', total_amount=total, user_id_id=user.id, order_date=order_date)
+    order.save()
+
+    for i in range(0, days.days):
+        ddate = checkin + timedelta(days=i)
+        ddate = ddate.strftime('%Y-%m-%d')
+        ho = Hotel_Order(hotel_room_id=rid, indate=ddate, user_id=user.id, order_id=order.id)
         ho.save()
     return render(request, "info.html", {"isSuccess": 1, "info_msg": "Order Successfully!"})
 
