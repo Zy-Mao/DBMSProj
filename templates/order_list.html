@@ -17,7 +17,7 @@ Order List
                 </tr>
             {% for order in orders %}
                 <tr>
-                    <td><a href="/room_hotel/{{ hotel.hotel_id }}/">{{ hotel.name }}</a></td>
+                    <td><a href="/orderdetail/{{ order.id }}/">{{ order.id }}</a></td>
                     <td>{{ order.order_type }}</td>
                     <td>{{ order.total_amount }}</td>
                     <td>{{ order.order_date }}</td>

@@ -226,12 +226,16 @@ def order_hotel(request):
                    "checkin": checkin.strftime('%Y-%m-%d'), "checkout": checkout.strftime('%Y-%m-%d'),
                    "period": days.days})
 
+
 def hotelOrderDetail(request, oid):
     order = Order.objects.get(id=oid)
     hotel_orders = Hotel_Order.objects.filter(order_id=order.id)
-    room = Hotel_Room.objects.get(id=hotel_orders[0].hotel_room)
 
-    return render(request, "confirm_hotel_order.html", {"oroom": room})
+    room = Hotel_Room.objects.get(room_no=hotel_orders[0].hotel_room_id)
+
+    hotel = Hotel_Detail.objects.get(hotel_id=room.hotel_id)
+
+    return render(request, "detail_hotel_order.html", {"oroom": room, "order": order, "ohotel": hotel})
 
 
 # date should be yyyy-mm-dd
