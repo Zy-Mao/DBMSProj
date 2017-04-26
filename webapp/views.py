@@ -35,7 +35,8 @@ def navigator(request, direction):
     elif to == 'account':
         return render(request, "account_info.html")
     elif to == 'travel':
-        return render(request)
+        city_list = City.objects.all()
+        return render(request, "main.html", {"city_list": city_list})
     elif to == 'hotel':
         return render(request, "search_hotel.html")
     elif to == 'about':
@@ -100,6 +101,7 @@ def account_navigator(request, direction):
     if to == 'info':
         return render(request, "account_info.html", {"show_id": 1, "state": ud.state, "zipcode": ud.zipcode, "city": ud.city, "address": ud.address})
     elif to == 'infomodify':
+
         return render(request, "account_info.html", {"show_id": 2, "ud": ud})
     elif to == 'pwdmodify':
         return render(request, "account_info.html", {"show_id": 3})
@@ -176,7 +178,7 @@ def search_hotel(request):
     else:
         hotels = Hotel_Detail.objects.filter(city=hcity)
 
-    if htype != '0':
+    if htype != 'ALL':
         hotels = hotels.filter(type=htype)
 
     paginator = Paginator(hotels, 10)

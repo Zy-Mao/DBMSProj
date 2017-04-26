@@ -3,18 +3,6 @@
 {% block title %}
 Travel
 {% endblock %}
-
-{% block head %}
-    <script>
-        $(function() {
-            $("#scity").autocomplete({
-                source: "/get_citys/",
-                minLength: 2,
-            });
-        });
-    </script>
-{% endblock %}
-
 {% block content %}
 <!-- Header -->
     <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
@@ -162,9 +150,7 @@ Travel
 {#              <div class="w3-display-container">#}
 							<div>
                 <img src="{% static "images/pic3.jpg" %}" alt="Rome" style="width:100%">
-								<div class="w3-display-container">
                   <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/26/">Rome</a></span>
-								</div>
               </div>
             </div>
           </div>
@@ -237,6 +223,13 @@ Travel
         }
         // Click on the first tablink on load
         document.getElementsByClassName("tablink")[0].click();
+
+        $(function() {
+            $("#scity").autocomplete({
+                source: "/get_citys/",
+                minLength: 2,
+            });
+        });
     </script>
 
 {% endblock %}

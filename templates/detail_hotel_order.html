@@ -12,7 +12,7 @@ Hotel Search
 {% block content %}
     {% if order %}
     <form action="{% url 'comfirm_hotel_order' %}" method="post">{% csrf_token %}
-        <table border="1">
+        <table class="w3-table-all">
             <tr>
                 <td>
                     <label>Order Detail</label>
@@ -44,7 +44,7 @@ Hotel Search
             </tr>
         </table>
 
-        <table border="2">
+        <table class="w3-table-all">
             <tr>
                 Order Summary
             </tr>
