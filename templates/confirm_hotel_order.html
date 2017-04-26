@@ -38,6 +38,10 @@ Hotel Search
                 <td><label>Room type</label></td>
                 <td>{{ oroom.type }}</td>
             </tr>
+            <tr>
+                <td><label>Room Description</label></td>
+                <td>{{ oroom.description }}</td>
+            </tr>
         </table>
 
         <table border="2">
@@ -62,7 +66,8 @@ Hotel Search
         <input type="hidden" id="indate" name="indate" value="{{ checkin }}" />
         <input type="hidden" id="outdate" name="outdate" value="{{ checkout }}" />
         <br><br>
-        <input type="submit" id="submit" name="submit" value="Submit" />&nbsp&nbsp&nbsp<input type="button" id="Return" name="Return" value="Return" />
+        <input type="submit" id="submit" name="submit" value="Submit" />&nbsp&nbsp&nbsp
+        <button class="w3-button w3-dark-grey" onclick="window.location.href='/navigator/{{ "hotel" }}/'">Re-Search</button>
     </form>
     {% endif %}
 <script>

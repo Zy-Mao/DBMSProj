@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+import time
 from datetime import datetime
 from datetime import timedelta
 from django.db import connection
@@ -197,7 +198,6 @@ def order_hotel(request):
     checkin = datetime.strptime(checkin, '%Y-%m-%d')
     checkout = datetime.strptime(checkout, '%Y-%m-%d')
 
-
     days = checkout - checkin
 
     for i in range(0, days.days):
@@ -213,6 +213,7 @@ def order_hotel(request):
                   {"order_status": 1, "ohotel": ohotel, "oroom": oroom,
                    "checkin": checkin.strftime('%Y-%m-%d'), "checkout": checkout.strftime('%Y-%m-%d'),
                    "period": days.days})
+
 
 # date should be yyyy-mm-dd
 # rid: room_id
