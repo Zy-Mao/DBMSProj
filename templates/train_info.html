@@ -8,11 +8,11 @@ Train Info
 				<form action="{% url 'order_train' %}" method="post">{% csrf_token %}
 					<p>{{ train.train_no }}</p>
 					<p>{{ train_schedule_date }}</p>
-					<table border="1">
+					<table class="w3-table-all"  border="1">
 								<tr>
 										<th>Arrival City</th>
 										<th>Arrival Time</th>
-{#										<th></th>#}
+										<th></th>
 								</tr>
 						{% for t in train_time_table_set %}
 								<tr>

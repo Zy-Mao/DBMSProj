@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% block title %}
-Travel
+Travel Go
 {% endblock %}
 {% block content %}
 <!-- Header -->
@@ -62,30 +62,40 @@ Travel
 							<div class="w3-half">
 {#								<div class="ui-widget">#}
                         <label for="scity">City</label>
-                        <input class="w3-input w3-border" id="scity" name="scity">
+{#                        <input class="w3-input w3-border" id="scity" name="scity">#}
 {#                    </div>#}
-{#								<label>Departure City</label>#}
-{#									<select class="selectpicker" name="dp" data-live-search="true" title="Select departure city..." data-width="100%"#}
-{#													data-show-subtext="true">#}
-{#										{% if city_list %}#}
-{#											{% for city in city_list %}#}
-{#												<option value={{ city.cid }} data-subtext={{ city.state }} >{{ city.city }}</option>#}
-{#											{% endfor %}#}
-{#										{% endif %}#}
-{#									</select>#}
+								<select class="selectpicker" id="scity" name="scity" data-live-search="true" title="Select city..." data-width="100%"
+													data-size="10" data-show-subtext="true">
+										{% if city_list %}
+											{% for city in city_list %}
+												<option value={{ city.city }} data-subtext={{ city.state }} >{{ city.city }}</option>
+											{% endfor %}
+										{% endif %}
+								</select>
 							</div>
 							<div class="w3-half">
 								<div class="w3-half">
 									<label for="htype">Type</label>
-								<input class="w3-input w3-border" type="text" id="htype" name="htype" list="htype_datalist" autocomplete="false">
-								<datalist id="htype_datalist">
-									<option value="ALL">
-									<option value="1">
-									<option value="2">
-									<option value="3">
-									<option value="4">
-									<option value="5">
-								</datalist>
+
+									<select class="selectpicker w3-border" id="htype" name="htype" title="Select hotel type..." data-width="100%"
+													data-size="10">
+										<option value="ALL">All</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+
+{#								<input class="w3-input w3-border" type="text" id="htype" name="htype" list="htype_datalist" autocomplete="false">#}
+{#								<datalist id="htype_datalist">#}
+{#									<option value="ALL">#}
+{#									<option value="1">#}
+{#									<option value="2">#}
+{#									<option value="3">#}
+{#									<option value="4">#}
+{#									<option value="5">#}
+{#								</datalist>#}
 
 {#								<select class="w3-input w3-border" id="htype" name="htype">#}
 {#                        <option value="0">All</option>#}
@@ -150,7 +160,9 @@ Travel
 {#              <div class="w3-display-container">#}
 							<div>
                 <img src="{% static "images/pic3.jpg" %}" alt="Rome" style="width:100%">
-                  <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/26/">Rome</a></span>
+								<div class="w3-display-container">
+                  <span class="w3-display-bottomleft w3-padding"><a href="/room_hotel/2/">Rome</a></span>
+							</div>
               </div>
             </div>
           </div>
@@ -224,12 +236,12 @@ Travel
         // Click on the first tablink on load
         document.getElementsByClassName("tablink")[0].click();
 
-        $(function() {
-            $("#scity").autocomplete({
-                source: "/get_citys/",
-                minLength: 2,
-            });
-        });
+{#        $(function() {#}
+{#            $("#scity").autocomplete({#}
+{#                source: "/get_citys/",#}
+{#                minLength: 2#}
+{#            });#}
+{#        });#}
     </script>
 
 {% endblock %}

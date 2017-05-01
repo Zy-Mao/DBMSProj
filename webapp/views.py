@@ -168,6 +168,7 @@ def search_hotel(request):
         hcity = request.POST['scity']
 
         htype = request.POST['htype']
+        print(hcity, htype)
     except Exception:
         hcity = request.GET.get('scity')
 
@@ -176,7 +177,8 @@ def search_hotel(request):
     if hcity == '':
         hotels = Hotel_Detail.objects.all()
     else:
-        hotels = Hotel_Detail.objects.filter(city=hcity)
+        hotels = Hotel_Detail.objects.filter(city__contains=hcity)
+        # hotels = Hotel_Detail.objects.filter(city__contains=hcity)
 
     if htype != 'ALL':
         hotels = hotels.filter(type=htype)
@@ -303,6 +305,8 @@ def search_trains(request):
             arrival_train_schedule_list = train_schedule_list.filter(arrival_city=arrival_city_name)
         except ValueError:
             raise render(request, "info.html", {"isError": 1, "info_msg": "Error"})
+        print(departure_train_schedule_list.count())
+        print(arrival_train_schedule_list.count())
         if departure_train_schedule_list.count() > 0 and arrival_train_schedule_list.count() > 0 \
                 and arrival_train_schedule_list.first().arrival_time > departure_train_schedule_list.first().arrival_time:
             ticket_remain = train.ticket_amount - \
@@ -343,12 +347,13 @@ def order_train(request):
     departure_train_schedule_info = Train_Schedule.objects.filter(id=request.POST.get("dtid", False)).first()
     arrival_train_schedule_info = Train_Schedule.objects.filter(id=request.POST.get("atid", False)).first()
     train_schedule_date = request.POST.get("train_schedule_date", False)
-    try:
-        user_detail_info = User_Detail.objects.filter(user=user_info).first()
-        if not request.user.is_authenticatedis or user_detail_info is None:
-            return render(request, "info.html", {"isError": 1, "info_msg": "Could not find user, please login."})
-    except Exception:
+    # try:
+    user_detail_info = User_Detail.objects.filter(user=user_info).first()
+    if user_detail_info is None:
+        # not request.user.is_authenticatedis or
         return render(request, "info.html", {"isError": 1, "info_msg": "Could not find user, please login."})
+    # except Exception:
+    #     return render(request, "info.html", {"isError": 1, "info_msg": "Could not find user, please login."})
     train_order_info = Train_Order(user=user_detail_info, transaction_date=timezone.now())
     train_order_info.save()
     for i in range(int(ticket_order_amount)):

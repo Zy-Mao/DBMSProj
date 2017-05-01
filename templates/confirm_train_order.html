@@ -5,8 +5,9 @@ Order Infomation
 {% block content %}
     <div class="w3-content" style="max-width:1100px;">
 			{% if train_order_info %}
+				<h3 style="text-align: center">Order Success.</h3>
 				<p>{{ train_order_info.transaction_date }}</p>
-					<table border="1">
+					<table class="w3-table-all" border="1">
 								<tr>
 									<th>Ticket NO</th>
 									<th>Train NO</th>
@@ -39,6 +40,6 @@ Order Infomation
 					<input type="number" value="{{ total_price }}"/>
 				</div>
 			{% endif %}
-			<input class="w3-button w3-dark-grey" type="submit" value="Place Order">
+{#			<input class="w3-button w3-dark-grey" type="submit" value="Place Order">#}
     </div>
 {% endblock %}

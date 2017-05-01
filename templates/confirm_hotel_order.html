@@ -12,6 +12,7 @@ Hotel Search
 {% block content %}
     {% if order_status %}
     <form action="{% url 'comfirm_hotel_order' %}" method="post">{% csrf_token %}
+{#			<h3 style="text-align: center">Order Success.</h3>#}
         <table class="w3-table-all">
             <tr>
                 <td>
